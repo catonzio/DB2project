@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>User recap</title>
+    </head>
+    <body>
+        <h1>Register successfull!</h1>
+        <h2>Recap:</h2>
+        Username: <p th:text="${user.username}"></p><br>
+        Password: <p th:text="${user.password}"></p><br>
+        Email: <p th:text="${user.email}"></p><br>
+    </body>
+</html>
