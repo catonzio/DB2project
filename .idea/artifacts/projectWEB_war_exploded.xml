@@ -1,11 +1,17 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="projectWEB:war exploded">
     <output-path>$PROJECT_DIR$/projectWEB/target/projectWEB-1.0-SNAPSHOT</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>projectWEB</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="projectWEB" />
-          <element id="jpa-descriptors" facet="projectEJB/jpa/JPA" />
         </element>
         <element id="directory" name="lib">
           <element id="archive" name="projectEJB-1.0-SNAPSHOT.jar">
@@ -29,7 +35,6 @@
         <element id="file-copy" path="$PROJECT_DIR$/projectWEB/target/projectWEB-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="projectWEB/web/Web" />
-      <element id="javaee-facet-resources" facet="projectEJB/ejb/EJB" />
     </root>
   </artifact>
 </component>
