@@ -59,11 +59,22 @@ public class RegistrationServlet extends HttpServlet {
 
         boolean result = userService.saveUser(user);
 
-        final WebContext ctx = new WebContext(req, resp, getServletContext(), req.getLocale());
-        ctx.setVariable("user", user);
-        //req.getSession().setAttribute("user", user);
-        String path = getServletContext().getContextPath() + "/userHome";
-        resp.sendRedirect(path);
+        String path;
+
+        if (!result) {
+            ServletContext servletContext = getServletContext();
+            final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+            ctx.setVariable("errorMsg", "Incorrect username or password");
+            path = "/index.html";
+            templateEngine.process(path, ctx, resp.getWriter());
+        } else {
+            //request.getSession().setAttribute("user", user);
+            path = getServletContext().getContextPath() + "/yesPage";
+            resp.sendRedirect(path);
+        }
+
+        //final WebContext ctx = new WebContext(req, resp, getServletContext(), req.getLocale());
+        //ctx.setVariable("user", user);
 
 
     }
