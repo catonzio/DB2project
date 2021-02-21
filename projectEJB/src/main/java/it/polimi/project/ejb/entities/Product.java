@@ -18,7 +18,8 @@ public class Product implements Serializable {
 
     private int name;
 
-    private int image;
+    @Lob
+    private byte[] photoimage;
 
     @Temporal(TemporalType.DATE)
     private Date productOfTheDay;

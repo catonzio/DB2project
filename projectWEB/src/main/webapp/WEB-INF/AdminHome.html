@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>User recap</title>
+    </head>
+
+    <div>
+        <p>Complete the form to create a mission</p>
+        <form action="#" th:action="@{/CreateProduct}" method="POST">
+            <fieldset>
+                <p>
+                    Name: <input type="text" name="name" required />
+                </p>
+                <p>
+                    Image: <input type="text" name="image" required />
+                </p>
+                <p>
+                    Product Of The Day: <input type="date" name="date"
+                                      th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+                                      placeholder="yyyy-mm-dd" required />
+                </p>
+
+                <p>
+                    <label for="questionnaires">Choose a questionnaire:</label>
+                    <select name="questionnaireId" id="questionnaireId">
+                        <option th:each="p : ${questionnaires}" th:value="${q.id}"
+                                th:text="${q.name}"></option>
+                    </select>
+                </p>
+
+
+                <input type="submit" name="Create Mission">
+            </fieldset>
+        </form>
+    </div>
+</html>
