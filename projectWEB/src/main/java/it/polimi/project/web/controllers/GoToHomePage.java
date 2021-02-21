@@ -1,7 +1,9 @@
 package it.polimi.project.web.controllers;
 
 
+import it.polimi.project.ejb.entities.Product;
 import it.polimi.project.ejb.entities.User;
+import it.polimi.project.ejb.services.ProductService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -27,6 +29,9 @@ public class GoToHomePage extends HttpServlet {
 //	@EJB(name = "it.polimi.db2.mission.services/ProjectService")
 //	private ProjectService pService;
 
+	@EJB(name = "it.polimi.project.ejb.services/ProductService")
+	private ProductService productService;
+
 	public GoToHomePage() {
 		super();
 	}
@@ -51,20 +56,9 @@ public class GoToHomePage extends HttpServlet {
 		}
 
 		User user = (User) session.getAttribute("user");
-/*		List<Mission> missions = null;
-		List<Project> projects = null;
 
-		try {
+		Product productOfDay = productService.getProductOfDay();
 
-
-		  missions = mService.findMissionsByUserRefresh(user.getId());
-			
-			projects = pService.findAllProjects();
-		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
-			return;
-		}
-*/
 		// Redirect to the Home page and add missions to the parameters
 		String path = "/WEB-INF/Home.html";
 		ServletContext servletContext = getServletContext();

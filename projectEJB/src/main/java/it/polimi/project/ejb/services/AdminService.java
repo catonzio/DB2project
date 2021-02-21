@@ -23,7 +23,9 @@ public class AdminService {
     public Admin checkCredentials(String usrn, String pwd) throws CredentialsException, NonUniqueResultException {
         List<Admin> aList = null;
         try {
-            aList = em.createNamedQuery("Admin.checkCredentials", Admin.class).setParameter(1, usrn).setParameter(2, pwd)
+            aList = em.createNamedQuery("Admin.checkCredentials", Admin.class)
+                    .setParameter(1, usrn)
+                    .setParameter(2, pwd)
                     .getResultList();
         } catch (PersistenceException e) {
             throw new CredentialsException("Could not verify credentials");

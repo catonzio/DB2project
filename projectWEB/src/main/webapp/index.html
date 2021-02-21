@@ -8,13 +8,16 @@
 <body>
 <h1>Welcome to the product of the day application</h1>
 
-<h2>Login:</h2>
-<form action="CheckLogin" method="POST">
-	Username or Email: <input type="text" name="username" required value="chiaram"><br>
-	Password: <input type="password" name="pwd" required value="chiarapwd"><br>
-	<input type="submit" value="Login">
-	<p th:text=" ${errorMsg}"></p>
-</form>
+<div>
+	<h2>Login:</h2>
+	<form action="CheckLogin" method="POST">
+		Username or Email: <input type="text" name="username" required value="chiaram"><br>
+		Password: <input type="password" name="pwd" required value="chiarapwd"><br>
+		<input type="submit" value="Login">
+		<p th:text=" ${errorMsg}"></p>
+	</form>
+	<a href="AdminLogin">I am an admin.</a>
+</div>
 
 <h2>Otherwise, register:</h2>
 

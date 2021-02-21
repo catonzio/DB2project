@@ -5,7 +5,42 @@
         <title>User recap</title>
     </head>
 
-    <div>
+    <h1>Welcome back, </h1>
+    <p th:text="${admin.username}"></p>
+    Insert product <button type="button" id="insert_p" value="Insert product" onclick="show_form_p()"></button>
+    <div id="insert_product" style="visibility: hidden;">
+        <form action="InsertProduct" method="get">
+            Name of the product: <input type="text" name="name"><br>
+            Date: <input type="date" name="date"><br>
+            Image: <input type="file" name="image" accept="*.jpg"><br>
+            <input type="submit" value="Create">
+        </form>
+    </div><br>
+    Insert questionnaire <button type="button" id="insert_q" value="Insert questionnaire" onclick="show_form_q()"></button>
+    <div id="insert_questionnaire" style="visibility: hidden;">
+        <form action="InsertQuestionnaire" method="get">
+            Name of the questionnaire: <input type="text" name="name"><br>
+            <input type="submit" value="Create">
+        </form>
+    </div>
+    <script type="text/javascript">
+
+        function show_form_p() {
+            div = document.getElementById("insert_product");
+            if(div.style.visibility == "hidden")
+                div.style.visibility = "visible";
+            else if(div.style.visibility == "visible")
+                div.style.visibility = "hidden";
+        }
+        function show_form_q() {
+            div = document.getElementById("insert_questionnaire");
+            if(div.style.visibility == "hidden")
+                div.style.visibility = "visible";
+            else if(div.style.visibility == "visible")
+                div.style.visibility = "hidden";
+        }
+    </script>
+    <!-- <div>
         <p>Complete the form to create a mission</p>
         <form action="#" th:action="@{/CreateProduct}" method="POST">
             <fieldset>
@@ -33,5 +68,5 @@
                 <input type="submit" name="Create Mission">
             </fieldset>
         </form>
-    </div>
+    </div> -->
 </html>
