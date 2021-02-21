@@ -19,7 +19,10 @@ public class Questionnaire implements Serializable {
     private Product product;
 
     @OneToMany(mappedBy = "questionnaire")
-    private List<Question> questions;
+    private List<Question> marketingQuestions;
+
+    @OneToMany(mappedBy = "questionnaire")
+    private List<Question> fixedQuestions;
 
 
 

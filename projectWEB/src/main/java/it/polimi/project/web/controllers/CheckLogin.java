@@ -56,6 +56,7 @@ public class CheckLogin extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
 			return;
 		}
+
 		User user;
 		try {
 			// query db to authenticate for user
