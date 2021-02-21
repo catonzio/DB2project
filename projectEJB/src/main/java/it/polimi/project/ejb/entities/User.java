@@ -11,7 +11,8 @@ import java.util.List;
  *
  */
 @Entity
-@Table(name = "usertable", schema = "db2project")
+@Data
+//@Table(name = "usertable", schema = "db2project")
 @NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE (r.username = ?1 or r.email = ?1) and r.password = ?2")
 
 public class User implements Serializable {
@@ -30,23 +31,9 @@ public class User implements Serializable {
     private String username;
     private String email;
 
-    // Bidirectional many-to-one association to Mission
-    /*
-     * Fetch type EAGER allows resorting the relationship list content also in the
-     * client Web servlet after the creation of a new mission. If you leave the
-     * default LAZY policy, the relationship is sorted only at the first access but
-     * then adding a new mission does not trigger the reloading of data from the
-     * database and thus the sort method in the client does not actually re-sort the
-     * list of missions. MERGE is not cascaded because we will modify and merge only
-     * username and surname attributes of the user and do not want to cascade
-     * detached changes to relationship.
-     */
-    /*
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "reporter", cascade = {CascadeType.PERSIST, CascadeType.REMOVE,
-            CascadeType.REFRESH})
-    @OrderBy("date DESC")
-    private List<Mission> missions;
-*/
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
+
     public User() {
     }
 
@@ -97,20 +84,5 @@ public class User implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
-/*
-    public List<Mission> getMissions() {
-        return this.missions;
-    }
 
-    public void addMission(Mission mission) {
-        getMissions().add(mission);
-        mission.setReporter(this);
-        // aligns both sides of the relationship
-        // if mission is new, invoking persist() on user cascades also to mission
-    }
-
-    public void removeMission(Mission mission) {
-        getMissions().remove(mission);
-    }
-*/
 }
