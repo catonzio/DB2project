@@ -59,7 +59,7 @@ public class GoToQuestionnairePage extends HttpServlet {
             Questionnaire questionnaire;
 
             if(productOfDay != null) {
-                questionnaire = productOfDay.getQuestionnaire();
+                questionnaire = productOfDay.getQuestionnaires().get(0);
             }
             else{
                 questionnaire = new Questionnaire();

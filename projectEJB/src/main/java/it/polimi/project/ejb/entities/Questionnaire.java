@@ -15,7 +15,7 @@ public class Questionnaire implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 
     @OneToMany(mappedBy = "questionnaire")

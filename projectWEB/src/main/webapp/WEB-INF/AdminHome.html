@@ -9,6 +9,10 @@
     <h1>Welcome back, </h1>
     <p th:text="${admin.username}"></p>
 
+    <div align="right">
+        <a th:href="@{/Logout}">Logout</a>
+    </div>
+
     Insert product <button type="button" id="insert_p" value="Insert product" onclick="show_form_p()"></button>
     <div id="insert_product" style="visibility: hidden;">
         <form action="InsertProduct" method="post" enctype="multipart/form-data">
