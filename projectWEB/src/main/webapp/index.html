@@ -1,37 +1,35 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-	<meta charset="ISO-8859-1">
-	<title>Login page</title>
-</head>
-<body>
-<h1>Welcome to the product of the day application</h1>
+	<head>
+		<meta charset="ISO-8859-1">
+		<title>Login page</title>
+	</head>
+	<body>
+		<h1>Welcome to the product of the day application</h1>
 
-<div>
-	<div align="right">
-		<a href="AdminLogin">I am an admin.</a>
-	</div>
-	<h2>Login:</h2>
-	<form action="CheckLogin" method="POST">
-		Username or Email: <input type="text" name="username" required value="chiaram"><br>
-		Password: <input type="password" name="pwd" required value="chiarapwd"><br>
-		<input type="submit" value="Login">
-		<p th:text=" ${errorMsg}"></p>
-	</form>
+		<div>
+			<div align="right">
+				<a href="AdminLogin">I am an admin.</a>
+			</div>
+			<h2>Login:</h2>
+			<form action="CheckLogin" method="POST">
+				Username or Email: <input type="text" name="username" required value="chiaram"><br>
+				Password: <input type="password" name="pwd" required value="chiarapwd"><br>
+				<input type="submit" value="Login">
+				<p th:text=" ${errorMsg}"></p>
+			</form>
 
-</div>
+		</div>
 
-<h2>Otherwise, register:</h2>
-
-<form method="POST" action="RegisterUser">
-	Username: <input type="text" name="username" required value="chiaram"><br>
-	Password: <input type="password" name="pwd" required value="chiarapwd"><br>
-	Email: <input type="email" name="email" required value="chiara@gmail.com"><br>
-	Name: <input type="text" name="name" required value="Chiara"><br>
-	Surname: <input type="text" name="surname" required value="Moser"><br>
-	<input type="submit" value="Register">
-	<p th:text=" ${errorMsg}"></p>
-</form>
-</body>
+		<h2>Otherwise, register:</h2>
+		<form method="POST" action="RegisterUser">
+			Username: <input type="text" name="username" required value="chiaram"><br>
+			Password: <input type="password" name="pwd" required value="chiarapwd"><br>
+			Email: <input type="email" name="email" required value="chiara@gmail.com"><br>
+			Name: <input type="text" name="name" required value="Chiara"><br>
+			Surname: <input type="text" name="surname" required value="Moser"><br>
+			<input type="submit" value="Register">
+			<p th:text=" ${errorMsg}"></p>
+		</form>
+	</body>
 </html>

@@ -25,6 +25,7 @@ public class Product implements Serializable {
     private byte[] photoimage;
 
     @Temporal(TemporalType.DATE)
+    @Column(unique = true)
     private Date productOfTheDay;
 
     @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
