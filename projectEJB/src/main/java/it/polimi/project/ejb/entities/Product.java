@@ -26,8 +26,8 @@ public class Product implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date productOfTheDay;
 
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    private List<Questionnaire> questionnaires;
+    @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
+    private Questionnaire questionnaire;
 
     @OneToMany(mappedBy = "product")
     private List<Review> reviews;
