@@ -8,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Data
+
 public class Questionnaire implements Serializable {
     private static final long serialVersionUID = 1L;
 

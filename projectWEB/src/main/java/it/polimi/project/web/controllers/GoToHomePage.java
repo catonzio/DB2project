@@ -62,7 +62,6 @@ public class GoToHomePage extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("productOfDay", productOfDay);
-		//ctx.setVariable("projects", projects);
 
 		templateEngine.process(path, ctx, response.getWriter());
 	}

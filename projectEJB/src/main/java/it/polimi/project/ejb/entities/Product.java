@@ -11,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Data
+@NamedQuery(name = "Product.findProductOfTheDay", query = "SELECT p FROM Product p  WHERE p.productOfTheDay = ?1 ")
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
