@@ -4,11 +4,14 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Data
+@NamedQuery(name = "Product.findProductOfTheDay", query = "SELECT p FROM Product p  WHERE p.productOfTheDay = ?1 ")
+
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -16,7 +19,7 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int name;
+    private String name;
 
     @Lob
     private byte[] photoimage;
@@ -24,11 +27,18 @@ public class Product implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date productOfTheDay;
 
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    private List<Questionnaire> questionnaires;
+    @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
+    private Questionnaire questionnaire;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
     private List<Review> reviews;
 
+    public byte[] getPhotoimage() {
+        return this.photoimage;
+    }
+
+    public String getPhotoimageData() {
+        return Base64.getMimeEncoder().encodeToString(photoimage);
+    }
 
 }
