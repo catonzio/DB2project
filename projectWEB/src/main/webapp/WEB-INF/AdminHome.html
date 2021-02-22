@@ -2,20 +2,24 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>User recap</title>
+        <title>Admin home page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
 
     <h1>Welcome back, </h1>
     <p th:text="${admin.username}"></p>
+
     Insert product <button type="button" id="insert_p" value="Insert product" onclick="show_form_p()"></button>
     <div id="insert_product" style="visibility: hidden;">
-        <form action="InsertProduct" method="get">
+        <form action="InsertProduct" method="post" enctype="multipart/form-data">
             Name of the product: <input type="text" name="name"><br>
             Date: <input type="date" name="date"><br>
-            Image: <input type="file" name="image" accept="*.jpg"><br>
+            Image: <input type="file" name="image"><br>
             <input type="submit" value="Create">
         </form>
+        <p th:text="${message}"></p>
     </div><br>
+
     Insert questionnaire <button type="button" id="insert_q" value="Insert questionnaire" onclick="show_form_q()"></button>
     <div id="insert_questionnaire" style="visibility: hidden;">
         <form action="InsertQuestionnaire" method="get">
@@ -23,17 +27,41 @@
             <input type="submit" value="Create">
         </form>
     </div>
-    <script type="text/javascript">
 
+    <div id="show_all_products">
+        <form method="get" action="GetAllProducts">
+            <input type="submit" value="Show all products">
+        </form>
+        <table th:if="${products != null}">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(products)}">
+                    <td colspan="2">No product available</td>
+                </tr>
+                <tr th:each="product : ${products}">
+                    <td><span th:text="${product.name}">Name </span> </td>
+                    <td><span th:text="${product.productOfTheDay}">Date </span> </td>
+                    <td><img th:src="@{'data:image/png;base64,' + ${product.getBase64Img()}}" width="200" height="200"> </img> </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
         function show_form_p() {
-            div = document.getElementById("insert_product");
-            if(div.style.visibility == "hidden")
+            let div = document.getElementById("insert_product");
+            if(div.style.visibility === "hidden")
                 div.style.visibility = "visible";
-            else if(div.style.visibility == "visible")
+            else if(div.style.visibility === "visible")
                 div.style.visibility = "hidden";
         }
         function show_form_q() {
-            div = document.getElementById("insert_questionnaire");
+            let div = document.getElementById("insert_questionnaire");
             if(div.style.visibility == "hidden")
                 div.style.visibility = "visible";
             else if(div.style.visibility == "visible")

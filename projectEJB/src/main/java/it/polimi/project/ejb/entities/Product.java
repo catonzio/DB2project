@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int name;
+    private String name;
 
     @Lob
     private byte[] photoimage;
@@ -29,6 +31,10 @@ public class Product implements Serializable {
 
     @OneToMany(mappedBy = "product")
     private List<Review> reviews;
+
+    public String getBase64Img() {
+        return Base64.getEncoder().encodeToString(this.photoimage);
+    }
 
 
 }

@@ -11,6 +11,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.eclipse.persistence.expressions.ExpressionOperator.today;
@@ -32,7 +33,6 @@ public class ProductService {
             return false;
         }
     }
-
 
     public void updateProductOfTheDay(long id) throws UpdateProfileException {
         try {
@@ -62,5 +62,15 @@ public class ProductService {
             ex.printStackTrace();
         }
         return product;
+    }
+
+    public List<Product> findAllProducts() {
+        List<Product> products = new ArrayList<>();
+        try {
+            products = em.createQuery("SELECT p FROM Product p", Product.class).getResultList();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return products;
     }
 }
