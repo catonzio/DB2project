@@ -8,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Data
+
 public class Questionnaire implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -15,7 +16,7 @@ public class Questionnaire implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     private Product product;
 
     @OneToMany(mappedBy = "questionnaire")

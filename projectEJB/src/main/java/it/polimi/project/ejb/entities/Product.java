@@ -13,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Data
+@NamedQuery(name = "Product.findProductOfTheDay", query = "SELECT p FROM Product p  WHERE p.productOfTheDay = ?1 ")
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -29,8 +30,8 @@ public class Product implements Serializable {
     @Column(unique = true)
     private LocalDate productOfTheDay;
 
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    private List<Questionnaire> questionnaires;
+    @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
+    private Questionnaire questionnaire;
 
     @OneToMany(mappedBy = "product")
     private List<Review> reviews;

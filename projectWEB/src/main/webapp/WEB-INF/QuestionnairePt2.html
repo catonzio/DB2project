@@ -11,8 +11,21 @@
 	<div align="right">
 		<a th:href="@{/Logout}">Logout</a>
 	</div>
-	<h1 th:text="${'Thank you ' + session.user.name + 'for filling the questionnaire today!'}"></h1>
-	<h2>Come back tomorrow</h2>
+
+	<h1 th:text="${'Statistical Questions'}"></h1>
+
+	<form id="q1" action="/QuestionnairePt2" >
+		<p th:each="q : ${questionnaire.fixedQuestions}">
+			<label  for="qst" th:text="${q.description}"></label><br>
+			<input type="text" id="qst" name="qst"><br><br>
+		</p>
+		<input type="submit" value="Submit">
+	</form>
+
+	<a th:href="@{/QuestionnairePt2}">Submit</a><br>
+	<a th:href="@{/Home}">Cancel</a><br>
+	<a th:href="@{/QuestionnairePt1}">Previous</a><br>
+
 
 </body>
 </html>

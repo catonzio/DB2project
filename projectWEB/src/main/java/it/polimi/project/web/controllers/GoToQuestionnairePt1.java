@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet("/Questionnaire")
-public class GoToQuestionnairePage extends MyServlet {
+@WebServlet("/QuestionnairePt1")
+public class GoToQuestionnairePt1 extends HttpServlet {
 
     //@EJB(name = "it.polimi.project.ejb.services/ProductService")
     //ProductService productService;

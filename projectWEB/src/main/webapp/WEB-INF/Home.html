@@ -17,11 +17,11 @@
 
 	<h1 align="center">Welcome to the Product of the Day Home Page</h1>
 
-	<div align="center" th:bgcolor="blue">
+	<div align="center" th:background="red">
 		<a th:text="${productOfDay.name}"></a><br>
 		<img th:src="@{'data:image/png;base64,' + ${productOfDay.getBase64Img()}}" width="200" height="200"> <br>
 		<a th:text="${productOfDay.reviews }"></a><br>
-		<a th:href="@{/Questionnaire}">Fill the questionnaire</a><br>
+		<a th:href="@{/QuestionnairePt1}">Fill the questionnaire</a><br>
 	</div>
 </body>
 </html>
