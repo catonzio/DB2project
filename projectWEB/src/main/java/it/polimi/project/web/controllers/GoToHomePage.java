@@ -18,61 +18,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/Home")
-public class GoToHomePage extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private TemplateEngine templateEngine;
-//	@EJB(name = "it.polimi.db2.mission.services/MissionService")
-//	private MissionService mService;
-//	@EJB(name = "it.polimi.db2.mission.services/ProjectService")
-//	private ProjectService pService;
+public class GoToHomePage extends MyServlet {
 
 	@EJB(name = "it.polimi.project.ejb.services/ProductService")
 	private ProductService productService;
 
-	public GoToHomePage() {
-		super();
-	}
-
-	public void init() throws ServletException {
-		ServletContext servletContext = getServletContext();
-		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-		templateResolver.setTemplateMode(TemplateMode.HTML);
-		this.templateEngine = new TemplateEngine();
-		this.templateEngine.setTemplateResolver(templateResolver);
-		templateResolver.setSuffix(".html");
-	}
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
 		// If the user is not logged in (not present in session) redirect to the login
 		String loginpath = getServletContext().getContextPath() + "/index.html";
-		HttpSession session = request.getSession();
+		HttpSession session = super.getSession(req, resp);
 		if (session.isNew() || session.getAttribute("user") == null) {
-			response.sendRedirect(loginpath);
+			resp.sendRedirect(loginpath);
 			return;
 		}
 
 		Product productOfDay = productService.getProductOfDay();
-
-		// Redirect to the Home page and add missions to the parameters
+		Map<String, Object> modelAttributes = new HashMap<>();
+		modelAttributes.put("productOfDay", productOfDay);
 		String path = "/WEB-INF/Home.html";
-		ServletContext servletContext = getServletContext();
-		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		ctx.setVariable("productOfDay", productOfDay);
-		//ctx.setVariable("projects", projects);
 
-		templateEngine.process(path, ctx, response.getWriter());
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
-
-	public void destroy() {
+		super.redirect(req, resp, path, modelAttributes, null);
 	}
 
 }

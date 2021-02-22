@@ -5,12 +5,14 @@ import it.polimi.project.ejb.entities.User;
 import it.polimi.project.ejb.exceptions.CredentialsException;
 import it.polimi.project.ejb.exceptions.UpdateProfileException;
 
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +38,7 @@ public class ProductService {
 
     public void updateProductOfTheDay(long id) throws UpdateProfileException {
         try {
-            long millis = System.currentTimeMillis();
-            Date today = new Date(millis);
+            LocalDate today = LocalDate.now();
             Product p = em.find(Product.class, id);
             p.setProductOfTheDay(today);
             em.persist(p);
@@ -49,11 +50,10 @@ public class ProductService {
     }
 
     public Product getProductOfDay() {
-        long millis = System.currentTimeMillis();
-        Date today = new Date(millis);
+        LocalDate today = LocalDate.now();
         Product product = null;
         try {
-            product = em.createNamedQuery("Product.findProductOfTheDay", Product.class)
+            product = em.createQuery("SELECT p FROM Product p WHERE p.productOfTheDay = ?1", Product.class)
                     .setParameter(1, today)
                     .getSingleResult();
         } catch (Exception ex) {

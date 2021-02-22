@@ -19,8 +19,7 @@
 
 	<div align="center" th:bgcolor="blue">
 		<a th:text="${productOfDay.name}"></a><br>
-		<img alt="photo"
-			 th:src="*{'data:image/png;base64,'+ productOfDay.getPhotoimage()}"><br>
+		<img th:src="@{'data:image/png;base64,' + ${productOfDay.getBase64Img()}}" width="200" height="200"> <br>
 		<a th:text="${productOfDay.reviews }"></a><br>
 		<a th:href="@{/Questionnaire}">Fill the questionnaire</a><br>
 	</div>

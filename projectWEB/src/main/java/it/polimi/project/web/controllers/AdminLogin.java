@@ -19,24 +19,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 @WebServlet("/AdminLogin")
-public class AdminLogin extends HttpServlet {
+public class AdminLogin extends MyServlet {
 
-    private static final long serialVersionUID = 1L;
-    private TemplateEngine templateEngine;
     @EJB(name = "it.polimi.project.ejb.services/AdminService")
     AdminService adminService;
-
-    public void init() throws ServletException {
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        this.templateEngine = new TemplateEngine();
-        this.templateEngine.setTemplateResolver(templateResolver);
-        templateResolver.setSuffix(".html");
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -46,11 +37,7 @@ public class AdminLogin extends HttpServlet {
             email = req.getParameter("email");
             pwd = req.getParameter("password");
             if (email == null && pwd == null) {
-                ServletContext servletContext = getServletContext();
-                final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-                String path = "/WEB-INF/AdminLogin.html";
-                templateEngine.process(path, ctx, resp.getWriter());
-                return;
+                super.redirect(req, resp, "/WEB-INF/AdminLogin.html", null, null);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -72,7 +59,6 @@ public class AdminLogin extends HttpServlet {
             }
 
         } catch (Exception e) {
-            // for debugging only e.printStackTrace();
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
             return;
         }
@@ -87,25 +73,18 @@ public class AdminLogin extends HttpServlet {
             return;
         }
 
-        // If the user exists, add info to the session and go to home page, otherwise
-        // show login page with error message
-
         String path;
+        Map<String, Object> modelAttributes = new HashMap<>();
+        Map<String, Object> sessionAttributes = new HashMap<>();
         if (admin == null) {
-            ServletContext servletContext = getServletContext();
-            final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-            ctx.setVariable("errorMsg", "Incorrect username or password");
+            modelAttributes.put("errorMsg", "Incorrect username or password");
             path = "/index.html";
-            templateEngine.process(path, ctx, response.getWriter());
         } else {
-            request.getSession().setAttribute("admin", admin);
+            sessionAttributes.put("admin", admin);
+            modelAttributes.put("admin", admin);
             path = "/WEB-INF/AdminHome.html";
-            ServletContext servletContext = getServletContext();
-            final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-            ctx.setVariable("admin", admin);
-            templateEngine.process(path, ctx, response.getWriter());
         }
-
+        super.redirect(request, response, path, modelAttributes, sessionAttributes);
     }
 
 }

@@ -20,58 +20,40 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet("/Questionnaire")
-public class GoToQuestionnairePage extends HttpServlet {
+public class GoToQuestionnairePage extends MyServlet {
 
-    private static final long serialVersionUID = 1L;
-    private TemplateEngine templateEngine;
     //@EJB(name = "it.polimi.project.ejb.services/ProductService")
     //ProductService productService;
 
-    public void init() throws ServletException {
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        this.templateEngine = new TemplateEngine();
-        this.templateEngine.setTemplateResolver(templateResolver);
-        templateResolver.setSuffix(".html");
-    }
-
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            // If the user is not logged in (not present in session) redirect to the login
-            String loginpath = getServletContext().getContextPath() + "/index.html";
-            HttpSession session = request.getSession();
-            if (session.isNew() || session.getAttribute("user") == null) {
-                response.sendRedirect(loginpath);
-                return;
-            }
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        // If the user is not logged in (not present in session) redirect to the login
+        String loginpath = getServletContext().getContextPath() + "/index.html";
+        HttpSession session = super.getSession(req, resp);
+        if (session.isNew() || session.getAttribute("user") == null) {
+            resp.sendRedirect(loginpath);
+            return;
+        }
 
+        Product productOfDay = (Product) super.getContext(req, resp).getVariable("productOfDay");
+        Questionnaire questionnaire;
 
+        if(productOfDay != null) {
+            questionnaire = productOfDay.getQuestionnaires().get(0);
+        }
+        else{
+            questionnaire = new Questionnaire();
+        }
+        String path = "/WEB-INF/QuestionnairePt1.html";
 
-            // Redirect to the Home page and add missions to the parameters
-            String path = "/WEB-INF/QuestionnairePt1.html";
-            ServletContext servletContext = getServletContext();
-            final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+        Map<String, Object> modelAttributes = new HashMap<>();
+        modelAttributes.put("questionnaire", questionnaire);
 
-            Product productOfDay = (Product) ctx.getVariable("productOfDay");
-            Questionnaire questionnaire;
-
-            if(productOfDay != null) {
-                questionnaire = productOfDay.getQuestionnaires().get(0);
-            }
-            else{
-                questionnaire = new Questionnaire();
-            }
-            ctx.setVariable("questionnaire", questionnaire);
-
-            templateEngine.process(path, ctx, response.getWriter());
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            doGet(request, response);
+        super.redirect(req, resp, path, modelAttributes, null);
     }
 
 }

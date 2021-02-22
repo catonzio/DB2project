@@ -9,6 +9,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
+import javax.ejb.Local;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -23,34 +24,21 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet("/InsertProduct")
 @MultipartConfig
-public class InsertProduct extends HttpServlet {
+public class InsertProduct extends MyServlet {
 
     @EJB(name = "it.polimi.project.ejb.services/ProductService")
     private ProductService productService;
 
-    private static final long serialVersionUID = 1L;
-    private TemplateEngine templateEngine;
-
-    public void init() throws ServletException {
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        this.templateEngine = new TemplateEngine();
-        this.templateEngine.setTemplateResolver(templateResolver);
-        templateResolver.setSuffix(".html");
-    }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String path = req.getServletContext().getRealPath("/");
-        path = path.substring(0, path.indexOf("db2-project") + 12) + "images";
 
         Part filePart = req.getPart("image");
         String fileName = getFileName(filePart);
-
         InputStream fileContent = null;
 
         if(fileName == null || (!fileName.endsWith(".jpg") && !fileName.endsWith(".png")))
@@ -61,7 +49,7 @@ public class InsertProduct extends HttpServlet {
             byte[] bytes = IOUtils.toByteArray(fileContent);
 
             String name = req.getParameter("name");
-            Date date = extractDate(req.getParameter("date"));
+            LocalDate date = LocalDate.parse(req.getParameter("date"));
 
             Product p = new Product();
             p.setName(name);
@@ -84,16 +72,12 @@ public class InsertProduct extends HttpServlet {
     }
 
     private void redirect(HttpServletRequest req, HttpServletResponse resp, String message) {
-        try {
-            String path = "/WEB-INF/AdminHome.html";
-            ServletContext servletContext = getServletContext();
-            final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-            ctx.setVariable("admin", ctx.getSession().getAttribute("admin"));
-            ctx.setVariable("message", message);
-            templateEngine.process(path, ctx, resp.getWriter());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String path = "/WEB-INF/AdminHome.html";
+        Map<String, Object> modelAttributes = new HashMap<>();
+        modelAttributes.put("admin", super.getSession(req, resp).getAttribute("admin"));
+        modelAttributes.put("message", message);
+
+        super.redirect(req, resp, path, modelAttributes, null);
     }
 
     private Date extractDate(String dateS) {

@@ -1,10 +1,12 @@
 package it.polimi.project.ejb.entities;
 
+
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -23,9 +25,9 @@ public class Product implements Serializable {
     @Lob
     private byte[] photoimage;
 
-    @Temporal(TemporalType.DATE)
+    //@Temporal(TemporalType.DATE)
     @Column(unique = true)
-    private Date productOfTheDay;
+    private LocalDate productOfTheDay;
 
     @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
     private List<Questionnaire> questionnaires;

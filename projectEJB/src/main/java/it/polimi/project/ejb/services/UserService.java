@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -52,5 +53,14 @@ public class UserService {
         } catch (PersistenceException e) {
             throw new UpdateProfileException("Could not change profile");
         }
+    }
+
+    public List findUserByUsrnEmail(String usrn, String email) {
+        List users;
+        users = em.createQuery("SELECT u FROM User u WHERE u.email = ?1 and u.username = ?2")
+                .setParameter(1, email)
+                .setParameter(2, usrn)
+                .getResultList();
+        return users;
     }
 }
