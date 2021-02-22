@@ -53,9 +53,7 @@ public class ProductService {
         Date today = new Date(millis);
         Product product = null;
         try {
-            product = em.createQuery(
-                    "SELECT p FROM Product p WHERE p.productOfTheDay = ?1",
-                    Product.class)
+            product = em.createNamedQuery("Product.findProductOfTheDay", Product.class)
                     .setParameter(1, today)
                     .getSingleResult();
         } catch (Exception ex) {

@@ -55,16 +55,14 @@ public class GoToHomePage extends HttpServlet {
 			return;
 		}
 
-		User user = (User) session.getAttribute("user");
-
 		Product productOfDay = productService.getProductOfDay();
 
 		// Redirect to the Home page and add missions to the parameters
 		String path = "/WEB-INF/Home.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-	//	ctx.setVariable("missions", missions);
-	//	ctx.setVariable("projects", projects);
+		ctx.setVariable("productOfDay", productOfDay);
+		//ctx.setVariable("projects", projects);
 
 		templateEngine.process(path, ctx, response.getWriter());
 	}
