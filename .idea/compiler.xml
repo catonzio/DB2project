@@ -14,7 +14,7 @@
     <bytecodeTargetLevel>
       <module name="db2-project" target="1.5" />
       <module name="projectEJB" target="1.8" />
-      <module name="projectWEB" target="1.8" />
+      <module name="projectWEB" target="9" />
     </bytecodeTargetLevel>
   </component>
 </project>

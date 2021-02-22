@@ -1,13 +1,16 @@
 package it.polimi.project.web.controllers;
 
 import it.polimi.project.ejb.entities.User;
+import it.polimi.project.ejb.exceptions.CredentialsException;
 import it.polimi.project.ejb.services.UserService;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
+import javax.persistence.NonUniqueResultException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,13 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/registerUser")
+@WebServlet("/RegisterUser")
 public class RegistrationServlet extends HttpServlet {
 
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.project.ejb.services/UserService")
-    private UserService userService;
+    private UserService usrService;
 
     public void init() throws ServletException {
         ServletContext servletContext = getServletContext();
@@ -34,31 +37,65 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username;
-        String password;
-        String email;
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String usrn = null;
+        String pwd = null;
+        String email = null;
+        String name = null;
+        String surname = null;
+        User user = new User();
         try {
-            username = req.getParameter("username");
-            password = req.getParameter("password");
-            email = req.getParameter("email");
+            usrn = StringEscapeUtils.escapeJava(request.getParameter("username"));
+            pwd = StringEscapeUtils.escapeJava(request.getParameter("pwd"));
+            name = StringEscapeUtils.escapeJava(request.getParameter("name"));
+            surname = StringEscapeUtils.escapeJava(request.getParameter("surname"));
+            email = StringEscapeUtils.escapeJava(request.getParameter("email"));
+            if (usrn == null || pwd == null || email == null || name == null || surname == null || usrn.isEmpty() || pwd.isEmpty()
+                    || email.isEmpty() || name.isEmpty() || surname.isEmpty() ) {
+                throw new Exception("Missing or empty credential value");
+            }
+            user.setEmail(email);
+            user.setUsername(usrn);
+            user.setPassword(pwd);
+            user.setName(name);
+            user.setSurname(surname);
 
-            if(username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty())
-                throw new Exception("Missing username or password or email");
-
-        } catch (Exception ex) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
+        } catch (Exception e) {
+            // for debugging only e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
             return;
         }
 
-        User user = new User();
+        boolean result = usrService.saveUser(user);
 
-        user.setEmail(email);
-        user.setUsername(username);
-        user.setPassword(password);
+/*        try {
+            // query db to authenticate for user
+            user = usrService.checkCredentials(usrn, pwd);
+        } catch (CredentialsException | NonUniqueResultException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials");
+            return;
+        }
+*/
 
-        boolean result = userService.saveUser(user);
+        String path;
+        if (user == null) {
+            ServletContext servletContext = getServletContext();
+            final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+            ctx.setVariable("errorMsg", "Incorrect username or password");
+            path = "/index.html";
+            templateEngine.process(path, ctx, response.getWriter());
+        } else {
+            request.getSession().setAttribute("user", user);
+            path = getServletContext().getContextPath() + "/Home";
+            response.sendRedirect(path);
+        }
 
+
+         /*
+
+
+<<<<<<< HEAD
         String path;
 
         if (!result) {
@@ -75,7 +112,15 @@ public class RegistrationServlet extends HttpServlet {
 
         //final WebContext ctx = new WebContext(req, resp, getServletContext(), req.getLocale());
         //ctx.setVariable("user", user);
+=======
+        final WebContext ctx = new WebContext(req, resp, getServletContext(), req.getLocale());
+        ctx.setVariable("user", user);
+>>>>>>> eafbab0d2deefda156c02d93418e3ca1fdd548b5
 
+        req.getSession().setAttribute("user", user);
+        path = getServletContext().getContextPath() + "/Home";
+        resp.sendRedirect(path);
+*/
 
     }
 }

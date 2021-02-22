@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Admin home page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <h1>Welcome back, </h1>
+    <p th:text="${admin.username}"></p>
+
+    <div align="right">
+        <a th:href="@{/Logout}">Logout</a>
+    </div>
+
+    Insert product <button type="button" id="insert_p" value="Insert product" onclick="show_form_p()"></button>
+    <div id="insert_product" style="visibility: hidden;">
+        <form action="InsertProduct" method="post" enctype="multipart/form-data">
+            Name of the product: <input type="text" name="name"><br>
+            Date: <input type="date" name="date"><br>
+            Image: <input type="file" name="image"><br>
+            <input type="submit" value="Create">
+        </form>
+        <p th:text="${message}"></p>
+    </div><br>
+
+    Insert questionnaire <button type="button" id="insert_q" value="Insert questionnaire" onclick="show_form_q()"></button>
+    <div id="insert_questionnaire" style="visibility: hidden;">
+        <form action="InsertQuestionnaire" method="get">
+            Name of the questionnaire: <input type="text" name="name"><br>
+            <input type="submit" value="Create">
+        </form>
+    </div>
+
+    <div id="show_all_products">
+        <form method="get" action="GetAllProducts">
+            <input type="submit" value="Show all products">
+        </form>
+        <table th:if="${products != null}">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(products)}">
+                    <td colspan="2">No product available</td>
+                </tr>
+                <tr th:each="product : ${products}">
+                    <td><span th:text="${product.name}">Name </span> </td>
+                    <td><span th:text="${product.productOfTheDay}">Date </span> </td>
+                    <td><img th:src="@{'data:image/png;base64,' + ${product.getBase64Img()}}" width="200" height="200"> </img> </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+        function show_form_p() {
+            let div = document.getElementById("insert_product");
+            if(div.style.visibility === "hidden")
+                div.style.visibility = "visible";
+            else if(div.style.visibility === "visible")
+                div.style.visibility = "hidden";
+        }
+        function show_form_q() {
+            let div = document.getElementById("insert_questionnaire");
+            if(div.style.visibility == "hidden")
+                div.style.visibility = "visible";
+            else if(div.style.visibility == "visible")
+                div.style.visibility = "hidden";
+        }
+    </script>
+    <!-- <div>
+        <p>Complete the form to create a mission</p>
+        <form action="#" th:action="@{/CreateProduct}" method="POST">
+            <fieldset>
+                <p>
+                    Name: <input type="text" name="name" required />
+                </p>
+                <p>
+                    Image: <input type="text" name="image" required />
+                </p>
+                <p>
+                    Product Of The Day: <input type="date" name="date"
+                                      th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+                                      placeholder="yyyy-mm-dd" required />
+                </p>
+
+                <p>
+                    <label for="questionnaires">Choose a questionnaire:</label>
+                    <select name="questionnaireId" id="questionnaireId">
+                        <option th:each="p : ${questionnaires}" th:value="${q.id}"
+                                th:text="${q.name}"></option>
+                    </select>
+                </p>
+
+
+                <input type="submit" name="Create Mission">
+            </fieldset>
+        </form>
+    </div> -->
+</html>

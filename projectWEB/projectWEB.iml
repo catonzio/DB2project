@@ -16,12 +16,14 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="EclipseLink" />
-        <datasource-mapping />
+        <datasource-mapping>
+          <factory-entry name="projectWEB" />
+        </datasource-mapping>
         <naming-strategy-map />
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_9">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -36,6 +38,10 @@
     <orderEntry type="library" name="JBoss Weld-2.0.3" level="project" />
     <orderEntry type="library" name="JBoss Weld-2.0.3 (2)" level="project" />
     <orderEntry type="library" name="JBoss Weld-2.0.3" level="project" />
+<<<<<<< HEAD
+=======
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.5" level="project" />
+>>>>>>> eafbab0d2deefda156c02d93418e3ca1fdd548b5
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-web-api:8.0.1" level="project" />
     <orderEntry type="module" module-name="projectEJB" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.22" level="project" />
@@ -63,5 +69,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-commons:1.7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.7.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.8.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
   </component>
 </module>
