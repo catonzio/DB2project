@@ -2,6 +2,8 @@ package it.polimi.project.web.controllers;
 
 
 import it.polimi.project.ejb.entities.Product;
+import it.polimi.project.ejb.entities.Questionnaire;
+import it.polimi.project.ejb.entities.Review;
 import it.polimi.project.ejb.services.ProductService;
 
 import javax.ejb.EJB;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet("/Home")

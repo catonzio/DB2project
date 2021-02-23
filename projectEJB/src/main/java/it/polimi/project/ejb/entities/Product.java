@@ -31,12 +31,16 @@ public class Product implements Serializable {
     @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
     private Questionnaire questionnaire;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
+            CascadeType.REFRESH }, fetch = FetchType.EAGER)
     private List<Review> reviews;
 
     public String getBase64Img() {
         return Base64.getEncoder().encodeToString(this.photoimage);
     }
 
-
+    public void addReview(Review review) {
+        getReviews().add(review);
+        review.setProduct(this);
+    }
 }

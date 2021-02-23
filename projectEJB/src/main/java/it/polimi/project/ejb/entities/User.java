@@ -26,7 +26,8 @@ public class User implements Serializable {
     private Boolean is_blocked;
     private int points;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
+            CascadeType.REFRESH })
     private List<Review> reviews;
 
     public User() {
@@ -34,4 +35,8 @@ public class User implements Serializable {
     }
 
 
+    public void addReview(Review review) {
+        getReviews().add(review);
+        review.setUser(this);
+    }
 }
