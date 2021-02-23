@@ -52,7 +52,7 @@ public class InsertProduct extends MyServlet {
             q.setProduct(p);
             p.setQuestionnaire(q);
 
-            if(productService.saveNewProduct(p) && questionnaireService.saveNewQuestionnaire(q)) {
+            if(productService.saveNewProduct(p) && questionnaireService.saveQuestionnaire(q)) {
                 redirect(req, resp, "Correctly saved!");
             } else {
                 redirect(req, resp, "Unable to save the product.");
