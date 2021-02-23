@@ -13,7 +13,7 @@
 	</div>
 	<h1>Marketing Questions</h1>
 
-	<form action="#" th:action="@{/QuestionnairePt1}" method="POST">
+	<form action="QuestionnairePt1" method="POST">
 		<fieldset>
 			<p th:each="q : ${questionnaire.marketingQuestions}">
 				<label  for="qst" th:text="${q.description}"></label><br>

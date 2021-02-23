@@ -28,9 +28,9 @@
 					<div class="questionnaire-form">
 						<h1 th:text="${'Product of the day: ' + productOfDay.name}"></h1><br>
 
-						<form id="q1" action="/NewReview" method="POST" class="form-group row">
+						<form id="q1" action="NewReview" method="POST" class="form-group row">
 							<div class="col-sm-10">
-								<input type="text" class="form-control" name="review" placeholder="Answer">
+								<input type="text" class="form-control" name="review" placeholder="Answer" required>
 							</div><br><br><br><br>
 							<input type="submit" value="Submit">
 						</form>
