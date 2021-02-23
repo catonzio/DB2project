@@ -1,22 +1,15 @@
 package it.polimi.project.ejb.services;
 
 import it.polimi.project.ejb.entities.Product;
-import it.polimi.project.ejb.entities.User;
-import it.polimi.project.ejb.exceptions.CredentialsException;
 import it.polimi.project.ejb.exceptions.UpdateProfileException;
 
-import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.eclipse.persistence.expressions.ExpressionOperator.today;
 
 @Stateless
 public class ProductService {

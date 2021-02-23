@@ -1,21 +1,13 @@
 package it.polimi.project.web.controllers;
 
 import it.polimi.project.ejb.entities.User;
-import it.polimi.project.ejb.exceptions.CredentialsException;
 import it.polimi.project.ejb.services.ProductService;
 import it.polimi.project.ejb.services.UserService;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
-import javax.persistence.NonUniqueResultException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,6 +22,12 @@ public class Registration extends MyServlet {
 
     @EJB(name = "it.polimi.project.ejb.services/ProductService")
     private ProductService productService;
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String path = "/WEB-INF/Registration.html";
+        super.redirect(req, resp, path, null, null);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
@@ -51,12 +49,12 @@ public class Registration extends MyServlet {
             if (usrn == null || pwd == null || email == null || name == null || surname == null || usrn.isEmpty() || pwd.isEmpty()
                     || email.isEmpty() || name.isEmpty() || surname.isEmpty() ) {
                 modelAttributes.put("errorMsg", "Missing field");
-                path = "/index.html";
+                path = "/WEB-INF/Registration.html";
                 super.redirect(request, response, path, modelAttributes, sessionAttributes);
             }
             if(!usrService.findUserByUsrnEmail(usrn, email).isEmpty()) {
                 modelAttributes.put("errorMsg", "Username or password already taken");
-                path = "/index.html";
+                path = "/WEB-INF/Registration.html";
                 super.redirect(request, response, path, modelAttributes, sessionAttributes);
             }
         } catch (Exception e) {
@@ -74,7 +72,7 @@ public class Registration extends MyServlet {
 
         if (!result) {
             modelAttributes.put("errorMsg", "Incorrect username or password");
-            path = "/index.html";
+            path = "/WEB-INF/Registration.html";
         } else {
             sessionAttributes.put("user", user);
             modelAttributes.put("productOfDay", productService.getProductOfDay());

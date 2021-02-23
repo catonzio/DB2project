@@ -1,4 +1,3 @@
-
 import it.polimi.project.ejb.entities.Admin;
 import it.polimi.project.ejb.entities.User;
 
@@ -6,14 +5,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.file.FileSystems;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DateTest {

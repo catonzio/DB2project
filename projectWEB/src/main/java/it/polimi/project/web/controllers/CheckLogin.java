@@ -5,17 +5,11 @@ import it.polimi.project.ejb.exceptions.CredentialsException;
 import it.polimi.project.ejb.services.ProductService;
 import it.polimi.project.ejb.services.UserService;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
 import javax.persistence.NonUniqueResultException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,6 +23,12 @@ public class CheckLogin extends MyServlet {
 	private UserService usrService;
 	@EJB(name = "it.polimi.project.ejb.services/ProductService")
 	private ProductService productService;
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String path = "index.html";
+		super.redirect(req, resp, path, null, null);
+	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String usrn;

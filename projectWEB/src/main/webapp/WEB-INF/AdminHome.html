@@ -1,104 +1,190 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <meta charset="UTF-8">
-        <title>Admin home page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="all"
+              href="../css/admin_home.css" th:href="@{/css/admin_home.css}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <title>Admin home</title>
     </head>
 
-    <h1>Welcome back, </h1>
-    <p th:text="${admin.username}"></p>
-
-    <div align="right">
-        <a th:href="@{/Logout}">Logout</a>
+    <div class="sidenav">
+        <a href="Logout" class="btn logout">Logout</a>
+        <div class="login-main-text">
+            <h2 th:text="${'Welcome back, ' + admin.username}"><br>home page</h2>
+            <p>This is your home page. From here you can insert and inspect products and questionnaires.</p>
+            <button class="btn btn-primary" onclick="upload_product()" id="product_upload-btn">Upload product</button><br>
+            <form method="get" action="GetAllProducts">
+                <button class="btn btn-primary" onclick="show_all_products()" id="products_list-btn">Show all products</button><br>
+            </form>
+            <button class="btn btn-primary" onclick="show_all_questionnaires()" id="questions_list-btn">Show all questionnaires</button><br>
+            <button class="btn btn-primary" onclick="show_all_users()" id="users_list-btn">Show all users</button><br>
+        </div>
     </div>
 
-    Insert product <button type="button" id="insert_p" value="Insert product" onclick="show_form_p()"></button>
-    <div id="insert_product" style="visibility: hidden;">
-        <form action="InsertProduct" method="post" enctype="multipart/form-data">
-            Name of the product: <input type="text" name="name"><br>
-            Date: <input type="date" name="date"><br>
-            Image: <input type="file" name="image"><br>
-            <input type="submit" value="Create">
-        </form>
-        <p th:text="${message}"></p>
-    </div><br>
+    <div class="main">
+        <div class="col-md-6 col-sm-12">
+            <div class="right upload-product_form" id="product_upload">
+                <form action="InsertProduct" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Product name</label>
+                        <input type="text" class="form-control" placeholder="Product name" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label>Day for the product</label>
+                        <input type="date" class="form-control" name="date">
+                    </div>
+                    <div class="form-group">
+                        <label>Select an image for the product</label>
+                        <input type="file" class="form-control" name="image">
+                    </div>
+                    <p th:text="${message}"></p>
+                </form>
+            </div>
 
-    Insert questionnaire <button type="button" id="insert_q" value="Insert questionnaire" onclick="show_form_q()"></button>
-    <div id="insert_questionnaire" style="visibility: hidden;">
-        <form action="InsertQuestionnaire" method="get">
-            Name of the questionnaire: <input type="text" name="name"><br>
-            <input type="submit" value="Create">
-        </form>
+            <div class="right products_list" id="products_list" th:if="${products != null}">
+                <p th:if="${#lists.isEmpty(products)}">No product available</p>
+                <table th:unless="${#lists.isEmpty(products)}" class="table table-borderless">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Product name</th>
+                        <th scope="col">Product of the day</th>
+                        <th scope="col">Image</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product : ${products}">
+                        <th scope="row" th:text="${product.id}"></th>
+                        <td th:text="${product.name}"></td>
+                        <td th:text="${product.productOfTheDay}"></td>
+                        <td><img th:src="@{'data:image/png;base64,' + ${product.getBase64Img()}}" width="80" height="100"> </img> </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="right questions_list" id="questions_list">
+                <h1>Questionnaires list</h1>
+            </div>
+
+            <div class="right users_list" id="users_list">
+                <h1>Users list</h1>
+            </div>
+        </div>
     </div>
 
-    <div id="show_all_products">
-        <form method="get" action="GetAllProducts">
-            <input type="submit" value="Show all products">
-        </form>
-        <table th:if="${products != null}">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Date</th>
-                    <th>Image</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:if="${#lists.isEmpty(products)}">
-                    <td colspan="2">No product available</td>
-                </tr>
-                <tr th:each="product : ${products}">
-                    <td><span th:text="${product.name}">Name </span> </td>
-                    <td><span th:text="${product.productOfTheDay}">Date </span> </td>
-                    <td><img th:src="@{'data:image/png;base64,' + ${product.getBase64Img()}}" width="200" height="200"> </img> </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
     <script type="text/javascript">
-        function show_form_p() {
-            let div = document.getElementById("insert_product");
-            if(div.style.visibility === "hidden")
-                div.style.visibility = "visible";
-            else if(div.style.visibility === "visible")
-                div.style.visibility = "hidden";
+        function show_all_products() {
+            $('#products_list-btn').animate({
+                opacity: 1.0,
+            }, 300);
+            $('#products_list').css({
+                display: "block"
+            });
+            $('#product_upload').css({
+                display: "none"
+            });
+            $('#questions_list').css({
+                display: "none"
+            });
+            $('#users_list').css({
+                display: "none"
+            });
+            $('#product_upload-btn').animate({
+                opacity: 0.5
+            }, 300);
+            $('#questions_list-btn').animate({
+                opacity: 0.5
+            }, 300);
+            $('#users_list-btn').animate({
+                opacity: 0.5
+            }, 300);
         }
-        function show_form_q() {
-            let div = document.getElementById("insert_questionnaire");
-            if(div.style.visibility == "hidden")
-                div.style.visibility = "visible";
-            else if(div.style.visibility == "visible")
-                div.style.visibility = "hidden";
+
+        function show_all_questionnaires() {
+            $('#questions_list-btn').animate({
+                opacity: 1.0,
+            }, 300);
+            $('#questions_list').css({
+                display: "block"
+            });
+            $('#product_upload').css({
+                display: "none"
+            });
+            $('#products_list').css({
+                display: "none"
+            });
+            $('#users_list').css({
+                display: "none"
+            });
+            $('#product_upload-btn').animate({
+                opacity: 0.5
+            }, 300);
+            $('#products_list-btn').animate({
+                opacity: 0.5
+            }, 300);
+            $('#users_list-btn').animate({
+                opacity: 0.5
+            }, 300);
+        }
+        function show_all_users() {
+            $('#users_list-btn').animate({
+                opacity: 1.0,
+            }, 300);
+            $('#users_list').css({
+                display: "block"
+            });
+            $('#product_upload').css({
+                display: "none"
+            });
+            $('#products_list').css({
+                display: "none"
+            });
+            $('#questions_list').css({
+                display: "none"
+            });
+            $('#product_upload-btn').animate({
+                opacity: 0.5
+            }, 300);
+            $('#products_list-btn').animate({
+                opacity: 0.5
+            }, 300);
+            $('#questions_list-btn').animate({
+                opacity: 0.5
+            }, 300);
+        }
+        function upload_product() {
+            $('#product_upload-btn').animate({
+                opacity: 1.0,
+            }, 300);
+            $('#product_upload').css({
+                display: "block"
+            });
+            $('#questions_list').css({
+                display: "none"
+            });
+            $('#products_list').css({
+                display: "none"
+            });
+            $('#users_list').css({
+                display: "none"
+            });
+            $('#questions_list-btn-btn').animate({
+                opacity: 0.5
+            }, 300);
+            $('#products_list-btn').animate({
+                opacity: 0.5
+            }, 300);
+            $('#users_list-btn').animate({
+                opacity: 0.5
+            }, 300);
         }
     </script>
-    <!-- <div>
-        <p>Complete the form to create a mission</p>
-        <form action="#" th:action="@{/CreateProduct}" method="POST">
-            <fieldset>
-                <p>
-                    Name: <input type="text" name="name" required />
-                </p>
-                <p>
-                    Image: <input type="text" name="image" required />
-                </p>
-                <p>
-                    Product Of The Day: <input type="date" name="date"
-                                      th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
-                                      placeholder="yyyy-mm-dd" required />
-                </p>
-
-                <p>
-                    <label for="questionnaires">Choose a questionnaire:</label>
-                    <select name="questionnaireId" id="questionnaireId">
-                        <option th:each="p : ${questionnaires}" th:value="${q.id}"
-                                th:text="${q.name}"></option>
-                    </select>
-                </p>
-
-
-                <input type="submit" name="Create Mission">
-            </fieldset>
-        </form>
-    </div> -->
 </html>

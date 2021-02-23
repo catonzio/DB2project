@@ -1,10 +1,7 @@
 package it.polimi.project.ejb.services;
 
 import it.polimi.project.ejb.entities.Admin;
-import it.polimi.project.ejb.entities.Product;
-import it.polimi.project.ejb.entities.User;
 import it.polimi.project.ejb.exceptions.CredentialsException;
-import it.polimi.project.ejb.exceptions.UpdateProductException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

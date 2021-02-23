@@ -1,15 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <meta charset="UTF-8">
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="all"
+              href="../css/admin_log.css" th:href="@{/css/admin_log.css}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
         <title>Admin login</title>
     </head>
     <body>
-        <h1>Login</h1>
-        <form action="AdminLogin" method="post">
-            Email: <input type="email" name="email" value="admin@gmail.com"><br>
-            Password: <input type="password" name="password" value="4dm1n"><br>
-            <input type="submit" value="Login">
-        </form>
+        <div class="sidenav">
+            <div class="login-main-text">
+                <h2>Gamified marketing Application<br> Admin login Page</h2>
+                <p>Login as an admin.</p>
+            </div>
+        </div>
+        <div class="main">
+            <div class="col-md-6 col-sm-12">
+                <div class="login-form">
+                    <form action="AdminLogin" method="POST">
+                        <div class="form-group">
+                            <label>User name or e-mail</label>
+                            <input type="text" class="form-control" placeholder="User name or e-mail" name="email" required value="admin@gmail.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" placeholder="Password" name="password" required value="4dm1n">
+                        </div>
+                        <p th:text="${errorMsg}"></p>
+                        <button type="submit" class="btn btn-black">Login</button>
+                        <a href="CheckLogin" class="btn btn-secondary">Back</a>
+                    </form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

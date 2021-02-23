@@ -2,20 +2,8 @@ package it.polimi.project.web.controllers;
 
 import it.polimi.project.ejb.entities.Product;
 import it.polimi.project.ejb.entities.Questionnaire;
-import it.polimi.project.ejb.exceptions.CredentialsException;
-import it.polimi.project.ejb.services.ProductService;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import javax.ejb.EJB;
-import javax.persistence.NonUniqueResultException;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

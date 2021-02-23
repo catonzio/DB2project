@@ -1,26 +1,18 @@
 package it.polimi.project.web.controllers;
 
 import it.polimi.project.ejb.entities.Admin;
-import it.polimi.project.ejb.entities.User;
 import it.polimi.project.ejb.exceptions.CredentialsException;
 import it.polimi.project.ejb.services.AdminService;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
 import javax.persistence.NonUniqueResultException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 @WebServlet("/AdminLogin")
@@ -57,7 +49,6 @@ public class AdminLogin extends MyServlet {
             if (email == null || pwd == null || email.isEmpty() || pwd.isEmpty()) {
                 throw new Exception("Missing or empty credential value");
             }
-
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
             return;
@@ -78,7 +69,7 @@ public class AdminLogin extends MyServlet {
         Map<String, Object> sessionAttributes = new HashMap<>();
         if (admin == null) {
             modelAttributes.put("errorMsg", "Incorrect username or password");
-            path = "/index.html";
+            path = "/WEB-INF/AdminLogin.html";
         } else {
             sessionAttributes.put("admin", admin);
             modelAttributes.put("admin", admin);

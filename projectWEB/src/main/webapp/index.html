@@ -1,35 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<meta charset="ISO-8859-1">
-		<title>Login page</title>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" media="all"
+			  href="css/index.css" th:href="@{/css/index.css}">
+		<!-- Bootstrap CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+		<title>Login</title>
 	</head>
 	<body>
-		<h1>Welcome to the product of the day application</h1>
-
-		<div>
-			<div align="right">
-				<a href="AdminLogin">I am an admin.</a>
+		<div class="sidenav">
+			<div class="login-main-text">
+				<h2>Gamified marketing Application<br> Login Page</h2>
+				<p>Login or register from here to access.</p>
 			</div>
-			<h2>Login:</h2>
-			<form action="CheckLogin" method="POST">
-				Username or Email: <input type="text" name="username" required value="chiaram"><br>
-				Password: <input type="password" name="pwd" required value="chiarapwd"><br>
-				<input type="submit" value="Login">
-				<p th:text=" ${errorMsg}"></p>
-			</form>
-
 		</div>
-
-		<h2>Otherwise, register:</h2>
-		<form method="POST" action="RegisterUser">
-			Username: <input type="text" name="username" required value="chiaram"><br>
-			Password: <input type="password" name="pwd" required value="chiarapwd"><br>
-			Email: <input type="email" name="email" required value="chiara@gmail.com"><br>
-			Name: <input type="text" name="name" required value="Chiara"><br>
-			Surname: <input type="text" name="surname" required value="Moser"><br>
-			<input type="submit" value="Register">
-			<p th:text=" ${errorMsg}"></p>
-		</form>
+		<div class="main">
+			<div class="col-md-6 col-sm-12">
+				<div class="login-form">
+					<form action="CheckLogin" method="POST">
+						<div class="form-group">
+							<label>User name or e-mail</label>
+							<input type="text" class="form-control" placeholder="User name or e-mail" name="username" required value="chiaram">
+						</div>
+						<div class="form-group">
+							<label>Password</label>
+							<input type="password" class="form-control" placeholder="Password" name="pwd" required value="chiarapwd">
+						</div>
+						<p th:text="${errorMsg}"></p>
+						<button type="submit" class="btn btn-black">Login</button>
+						<a href="RegisterUser" class="btn btn-secondary">Register</a>
+						<a href="AdminLogin" class="btn btn-secondary">I am an admin</a>
+					</form>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
