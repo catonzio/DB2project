@@ -11,16 +11,19 @@
 	<div align="right">
 		<a th:href="@{/Logout}">Logout</a>
 	</div>
-	<h1 th:text="${'Marketing Questions'}"></h1>
+	<h1>Marketing Questions</h1>
 
-	<form id="q1" action="/QuestionnairePt1" >
-		<p th:each="q : ${questionnaire.marketingQuestions}">
-			<label  for="qst" th:text="${q.description}"></label><br>
-			<input type="text" id="qst" name="qst" required><br><br>
-		</p>
+	<form action="#" th:action="@{/QuestionnairePt1}" method="POST">
+		<fieldset>
+			<p th:each="q : ${questionnaire.marketingQuestions}">
+				<label  for="qst" th:text="${q.description}"></label><br>
+				<input type="text" id="qst" name="qst" required><br><br>
+			</p>
+		</fieldset>
+		<a th:href="@{/QuestionnairePt2}">Next</a><br>
 	</form>
 
-	<a th:href="@{/QuestionnairePt2}">Next</a><br>
+
 
 
 </body>

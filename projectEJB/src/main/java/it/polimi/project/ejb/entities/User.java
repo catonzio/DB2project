@@ -9,7 +9,6 @@ import java.util.List;
 @Entity
 @Data
 @NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE (r.username = ?1 or r.email = ?1) and r.password = ?2")
-
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
