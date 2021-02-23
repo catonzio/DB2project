@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @WebServlet("/QuestionnairePt1")
-public class GoToQuestionnairePt1 extends HttpServlet {
+public class GoToQuestionnairePt1 extends MyServlet {
 
     //@EJB(name = "it.polimi.project.ejb.services/ProductService")
     //ProductService productService;
@@ -43,7 +43,7 @@ public class GoToQuestionnairePt1 extends HttpServlet {
         Questionnaire questionnaire;
 
         if(productOfDay != null) {
-            questionnaire = productOfDay.getQuestionnaires().get(0);
+            questionnaire = productOfDay.getQuestionnaire();
         }
         else{
             questionnaire = new Questionnaire();

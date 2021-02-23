@@ -25,6 +25,4 @@ public class Questionnaire implements Serializable {
     @OneToMany(mappedBy = "questionnaire")
     private List<Question> fixedQuestions;
 
-
-
 }
