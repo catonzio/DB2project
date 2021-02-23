@@ -9,7 +9,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
         <title>Admin home</title>
     </head>
-
     <div class="sidenav">
         <a href="Logout" class="btn logout">Logout</a>
         <div class="login-main-text">
@@ -28,6 +27,7 @@
         <div class="col-md-6 col-sm-12">
             <div class="right upload-product_form" id="product_upload">
                 <form action="InsertProduct" method="post" enctype="multipart/form-data">
+
                     <div class="form-group">
                         <label>Product name</label>
                         <input type="text" class="form-control" placeholder="Product name" name="name">
@@ -39,6 +39,33 @@
                     <div class="form-group">
                         <label>Select an image for the product</label>
                         <input type="file" class="form-control" name="image">
+                    </div>
+                    <div class="container-fluid form-question" id="div-questionnaire">
+                        <div class="row">
+                            <div class="col-9">
+                                <label>Create a questionnaire for the product</label>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-primary" title="Add question" onclick="add_question_()" name="add_question" id="add_question">+</button>
+                            </div>
+                            <div class="col-1">
+                                <button type="button" class="btn btn-primary" title="Delete all questions" onclick="delete_all_questions()" name="add_question" id="add_question">D</button>
+                            </div>
+                        </div>
+                        <div id="table-questionnaire">
+                            <div class="ext-row row">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <input type="text" class="form-control" name="question1" id="question1" placeholder="Question #1">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-9">
+                                        <input type="text" class="form-control" name="answer1" id="answer1" placeholder="Answer #1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <p th:text="${message}"></p>
                     <input type="submit" class="btn btn-primary">
@@ -82,6 +109,84 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     <script type="text/javascript">
+        function delete_all_questions() {
+            let div_quest = document.getElementById("table-questionnaire");
+            let rows = div_quest.getElementsByClassName("ext-row");
+            console.log(rows.length)
+            for(var i=rows.length-1; i>=0; i--) {
+                let inp = rows[i].getElementsByTagName("input")[0];
+                num = parseInt(inp.id.substr(inp.id.length - 1));
+                if(num != 1) {
+                    console.log("Removing " + num);
+                    rows[i].remove();
+                }
+            }
+        }
+
+        function add_question_() {
+            let div_quest = document.getElementById("table-questionnaire");
+            let inputs = div_quest.getElementsByTagName("input");
+            let lastQuestion = inputs[inputs.length-1].id.substr(inputs[inputs.length-1].id.length - 1);
+            lastQuestion = parseInt(lastQuestion) + 1;
+
+            let new_ext_row = document.createElement("div");
+            new_ext_row.classList.add("ext-row");
+            new_ext_row.classList.add("row");
+            div_quest.appendChild(new_ext_row);
+
+            let new_row = document.createElement("div");
+            new_row.classList.add("row");
+            new_ext_row.appendChild(new_row);
+
+            let new_inp_div = document.createElement("div");
+            new_inp_div.classList.add("col-9");
+            new_row.appendChild(new_inp_div);
+
+            let new_inp = document.createElement("input");
+            new_inp.id = "question"+lastQuestion;
+            new_inp.classList.add("form-control");
+            new_inp.name = "question"+lastQuestion;
+            new_inp.placeholder = "Question #"+lastQuestion;
+
+            new_inp_div.appendChild(new_inp);
+
+            let new_btn_div = document.createElement("div");
+            new_btn_div.classList.add("col-3");
+            new_row.appendChild(new_btn_div);
+
+            let new_btn = document.createElement("button");
+            new_btn.id = "button"+lastQuestion;
+            new_btn.classList.add("btn-primary");
+            new_btn.classList.add("btn");
+            new_btn.name = "button"+lastQuestion;
+            new_btn.value = "-";
+            new_btn.type = "button";
+            new_btn.title = "Delete question #"+lastQuestion;
+            new_btn.onclick = function() {delete_question(new_ext_row);};
+
+            new_btn_div.appendChild(new_btn);
+
+            let new_answ_row = document.createElement("div");
+            new_answ_row.classList.add("row");
+            new_ext_row.appendChild(new_answ_row);
+
+            let new_answ_div = document.createElement("div");
+            new_inp_div.classList.add("col-6");
+            new_answ_row.appendChild(new_answ_div);
+
+            let new_answ = document.createElement("input");
+            new_answ.id = "answer"+lastQuestion;
+            new_answ.classList.add("form-control");
+            new_answ.name = "answer"+lastQuestion;
+            new_answ.placeholder = "Answer #"+lastQuestion;
+
+            new_answ_div.appendChild(new_answ);
+        }
+
+        function delete_question(row) {
+            row.remove();
+        }
+
         function show_all_products() {
             $('#products_list-btn').animate({
                 opacity: 1.0,
@@ -108,7 +213,6 @@
                 opacity: 0.5
             }, 300);
         }
-
         function show_all_questionnaires() {
             $('#questions_list-btn').animate({
                 opacity: 1.0,

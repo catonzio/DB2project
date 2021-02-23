@@ -16,6 +16,7 @@ body {
 
 .main {
     padding: 0px 10px;
+    width: 60%;
 }
 
 @media screen and (max-height: 450px) {
@@ -47,6 +48,14 @@ body {
 }
 
 .form-group{
+    padding: 10px;
+}
+
+.form-question {
+    padding: 10px;
+}
+
+.row {
     padding: 10px;
 }
 
@@ -115,5 +124,5 @@ body {
     background-color: rgba(179, 107, 0, 0.3) !important;
     border: none !important;
     color: #fff !important;
-    margin-left: 10% !important;   
+    margin-left: 10% !important;
 }

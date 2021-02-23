@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -33,6 +34,10 @@ public class Product implements Serializable {
 
     @OneToMany(mappedBy = "product")
     private List<Review> reviews;
+
+    public Product() {
+        this.reviews = new ArrayList<>();
+    }
 
     public String getBase64Img() {
         return Base64.getEncoder().encodeToString(this.photoimage);
