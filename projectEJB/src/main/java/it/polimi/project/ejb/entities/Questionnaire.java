@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,5 +25,15 @@ public class Questionnaire implements Serializable {
 
     @OneToMany(mappedBy = "questionnaire")
     private List<Question> fixedQuestions;
+
+    public Questionnaire() {
+        this.marketingQuestions = new ArrayList<>();
+        this.fixedQuestions = new ArrayList<>();
+    }
+
+    public void addMarketingQuestion(Question q) {
+        this.marketingQuestions.add(q);
+        q.setQuestionnaire(this);
+    }
 
 }
