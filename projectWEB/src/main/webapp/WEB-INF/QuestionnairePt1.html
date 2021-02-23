@@ -17,7 +17,7 @@
 		<fieldset>
 			<p th:each="q : ${questionnaire.marketingQuestions}">
 				<label  for="qst" th:text="${q.description}"></label><br>
-				<input type="text" id="qst" name="qst" required><br><br>
+				<input type="text" id="qst" name="${q.id}" required><br><br>
 			</p>
 		</fieldset>
 		<a th:href="@{/QuestionnairePt2}">Next</a><br>

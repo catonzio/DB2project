@@ -14,7 +14,7 @@
 
 	<h1 th:text="${'Statistical Questions'}"></h1>
 
-	<form id="q1" action="/QuestionnairePt2" >
+	<form id="q1" action="/QuestionnairePt2"  method="POST">
 		<p th:each="q : ${questionnaire.fixedQuestions}">
 			<label  for="qst" th:text="${q.description}"></label><br>
 			<input type="text" id="qst" name="qst"><br><br>
@@ -22,7 +22,7 @@
 		<input type="submit" value="Submit">
 	</form>
 
-	<a th:href="@{/QuestionnairePt2}">Submit</a><br>
+	<!--<a th:href="@{/QuestionnairePt2}">Submit</a><br>-->
 	<a th:href="@{/Home}">Cancel</a><br>
 	<a th:href="@{/QuestionnairePt1}">Previous</a><br>
 
