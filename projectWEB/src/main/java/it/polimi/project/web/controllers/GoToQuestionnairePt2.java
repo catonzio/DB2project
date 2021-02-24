@@ -2,6 +2,7 @@ package it.polimi.project.web.controllers;
 
 import it.polimi.project.ejb.entities.*;
 import it.polimi.project.ejb.enums.QuestionType;
+import it.polimi.project.ejb.services.QuestionService;
 import it.polimi.project.ejb.services.QuestionnaireService;
 import org.apache.commons.lang.StringEscapeUtils;
 
