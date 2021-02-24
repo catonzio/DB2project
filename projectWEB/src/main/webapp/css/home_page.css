@@ -72,6 +72,13 @@ body {
 .btn-primary{
     background-color: #990000 !important;
     color: #fff !important;
+    border: none !important;
+}
+
+.btn-side {
+    background-color: rgba(204, 0, 0, 0.5) !important;
+    border: none !important;
+    color: #fff !important;
 }
 
 .form-check-input {

@@ -1,31 +1,65 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1">
-<title>Home</title>
-<link rel="stylesheet" type="text/css" media="all"
-	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" media="all"
+		  href="../css/home_page.css" th:href="@{/css/home_page.css}"/>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+	<title>Questionnaire page</title>
 </head>
 <body>
-
-	<div align="right">
-		<a th:href="@{/Logout}">Logout</a>
+<div class="sidenav">
+	<div>
+		<a href="Logout" class="btn logout">Logout</a>
 	</div>
-
-	<h1 th:text="${'Statistical Questions'}"></h1>
-
-	<form id="q1" action="QuestionnairePt2"  method="POST">
-		<p th:each="q : ${fixedQuestions}">
-			<label  for="qst" th:text="${q.description}"></label><br>
-			<input type="text" id="qst" name="qst"><br><br>
-		</p>
-		<input type="submit" value="Submit">
-	</form>
-
-	<!--<a th:href="@{/QuestionnairePt2}">Submit</a><br>-->
-	<a th:href="@{/Home}">Cancel</a><br>
-	<a th:href="@{/QuestionnairePt1}">Previous</a><br>
-
-
+	<div class="login-main-text">
+		<h2 th:text="${'Welcome back, ' + session.user.name + ' ' + session.user.surname}"><br>home page</h2>
+		<p>This is the product of the day. Answer the questionnaire and gain points.</p>
+	</div>
+</div>
+<div class="main">
+	<div class="questionnaire">
+		<img class="product-img" th:src="@{'data:image/png;base64,' + ${session.productOfDay.getBase64Img()}}" width="full" height="300">
+		<h1 th:text="${'Product of the day: ' + session.productOfDay.name}"></h1>
+		<div class="form-group">
+			<form action="QuestionnaireCompleted" method="POST">
+				<div class="container-fluid">
+					<ol>
+						<li th:each="q : ${fixedQuestions}">
+							<div class="row">
+								<div class="col-12">
+									<p class="question" th:text="${q}"></p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-12">
+									<textarea class="answer" rows="1"></textarea>
+								</div>
+							</div>
+						</li>
+					</ol>
+				</div>
+				<input type="submit" name="submit-btn" class="btn btn-primary" value="Submit">
+				<a href="Home" id="cancel-btn" class="btn btn-secondary">Cancel</a>
+				<a href="QuestionnairePt1" id="back-btn" class="btn btn-secondary">Back</a>
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	window.onload = function() {
+		let answers = document.getElementsByClassName("answer");
+		for(let i=0; i<answers.length; i++) {
+			let ans = answers[i];
+			ans.name = "answer"+(i+1);
+			ans.placeholder = "Answer #"+(i+1);
+			ans.id = "answer"+(i+1);
+		}
+	}
+</script>
 </body>
 </html>

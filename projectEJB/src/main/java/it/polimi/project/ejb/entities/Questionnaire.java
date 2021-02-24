@@ -24,15 +24,20 @@ public class Questionnaire implements Serializable {
     @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private Product relatedProduct;
 
-    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
-    private List<Question> marketingQuestions;
+    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
+    private List<Question> questions;
 
-    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
-    private List<Question> fixedQuestions;
+    @OneToMany(mappedBy = "relatedQuestionnaire")
+    private List<UserAnswer> answers;
+
+    private int numMarketingQuestions;
+    private int numFixedQuestions;
 
     public Questionnaire() {
-        this.marketingQuestions = new ArrayList<>();
-        this.fixedQuestions = new ArrayList<>();
+        this.questions = new ArrayList<>();
+        this.answers = new ArrayList<>();
+        numMarketingQuestions = 0;
+        numFixedQuestions = 0;
         this.createFixedQuestions();
     }
 
@@ -56,14 +61,23 @@ public class Questionnaire implements Serializable {
 
     public void setFixedQuestions(List<Question> fixedQuestions) {
         fixedQuestions.forEach(el -> {
-            el.setQuestionnaire(this);
-            this.fixedQuestions.add(el);
+            if(el.getType().equals(QuestionType.FIXED)) {
+                el.setQuestionnaire(this);
+                this.questions.add(el);
+                this.numFixedQuestions++;
+            }
         });
     }
 
     public void addMarketingQuestion(Question q) {
-        this.marketingQuestions.add(q);
-        q.setQuestionnaire(this);
+        if(q.getType().equals(QuestionType.MARKETING)) {
+            this.questions.add(q);
+            q.setQuestionnaire(this);
+            this.numMarketingQuestions++;
+        }
     }
 
+    public void addAnswer(UserAnswer answer) {
+        this.answers.add(answer);
+    }
 }

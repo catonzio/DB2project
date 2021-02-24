@@ -45,7 +45,8 @@ public class Product implements Serializable {
     }
 
     public void addReview(Review review) {
-        getReviews().add(review);
-        review.setProduct(this);
+        if(review != null) {
+            getReviews().add(review);
+        }
     }
 }
