@@ -3,6 +3,7 @@ package it.polimi.project.web.controllers;
 import it.polimi.project.ejb.entities.Product;
 import it.polimi.project.ejb.entities.Question;
 import it.polimi.project.ejb.entities.Questionnaire;
+import it.polimi.project.ejb.services.QuestionService;
 import it.polimi.project.ejb.services.QuestionnaireService;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -21,6 +22,8 @@ import java.util.Map;
 public class GoToQuestionnairePt2 extends MyServlet {
     @EJB(name = "it.polimi.project.ejb.services/QuestionnaireService")
     private QuestionnaireService questionnaireService;
+    @EJB(name = "it.polimi.project.ejb.services/QuestionService")
+    QuestionService questionService;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,26 +35,18 @@ public class GoToQuestionnairePt2 extends MyServlet {
             return;
         }
 
+
         //Product productOfDay = (Product) super.getContext(request, response).getVariable("productOfDay");
-        Questionnaire questionnaire;
-        questionnaire = (Questionnaire) super.getContext(request, response).getVariable("questionnaire");
-
-        if(questionnaire == null) {
-            questionnaire = new Questionnaire();
-            //ERROR
-        }
+        //Questionnaire questionnaire = (Questionnaire) super.getContext(request, response).getVariable("questionnaire");
+        List<Question> marketingQuestions = (List<Question>) super.getContext(request, response).getVariable("marketingQuestions");
+        List<Question> fixedQuestions = (List<Question>) super.getContext(request, response).getVariable("fixedQuestions");
 
 
-        List<Question> mqsts = questionnaire.getMarketingQuestions();
-        if(mqsts != null && !mqsts.isEmpty()) {
-            mqsts.forEach(question -> {
-                String answer = StringEscapeUtils.escapeJava(request.getParameter("question.id"));
-            });
-        }
 
         String path = "/WEB-INF/QuestionnairePt2.html";
         Map<String, Object> modelAttributes = new HashMap<>();
-        modelAttributes.put("questionnaire", questionnaire);
+        modelAttributes.put("fixedQuestions", fixedQuestions);
+        modelAttributes.put("marketingQuestions", marketingQuestions);
 
         super.redirect(request, response, path, modelAttributes, null);
     }
@@ -68,8 +63,8 @@ public class GoToQuestionnairePt2 extends MyServlet {
             //question.setAnswer(answer);
         });
 
-        boolean result = questionnaireService.saveQuestionnaire(questionnaire);
-
+       // boolean result = questionnaireService.saveQuestionnaire(questionnaire);
+        boolean result = true;
         String path = "/WEB-INF/AdminHome.html";
         Map<String, Object> modelAttributes = new HashMap<>();
         if (!result) {

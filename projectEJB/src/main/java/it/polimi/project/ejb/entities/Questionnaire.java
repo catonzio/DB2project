@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NamedQuery(name="Questionnaire.findByProdId", query = "SELECT q FROM Questionnaire q WHERE q.relatedProduct = ?1 ")
 public class Questionnaire implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -20,13 +21,13 @@ public class Questionnaire implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private Product relatedProduct;
 
-    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST })
+    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
     private List<Question> marketingQuestions;
 
-    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST })
+    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
     private List<Question> fixedQuestions;
 
     public Questionnaire() {

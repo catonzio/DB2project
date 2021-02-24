@@ -50,6 +50,8 @@ public class InsertProduct extends MyServlet {
             Product p = extractProduct(req);
             p.setPhotoimage(bytes);
 
+            //questionnaireService.saveQuestionnaire(q, p);
+
             q.setRelatedProduct(p);
             p.setQuestionnaire(q);
 

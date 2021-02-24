@@ -18,10 +18,12 @@ public class QuestionnaireService {
 
     public QuestionnaireService() {}
 
-    public boolean saveQuestionnaire(Questionnaire q) {
+    public boolean saveQuestionnaire(Questionnaire q, Product p) {
         try {
             if(q != null) {
-                em.persist(q);
+                q.setRelatedProduct(p);
+                p.setQuestionnaire(q);
+                //em.persist(q);
                 return true;
             } else
                 return false;
@@ -33,4 +35,7 @@ public class QuestionnaireService {
     }
 
 
+    public Questionnaire findQuestionnaireByProdId(Product p) {
+        return em.createNamedQuery("Questionnaire.findByProdId", Questionnaire.class).setParameter(1, p).getSingleResult();
+    }
 }

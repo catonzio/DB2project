@@ -15,7 +15,7 @@
 
 	<form action="QuestionnairePt1" method="POST">
 		<fieldset>
-			<p th:each="q : ${questionnaire.marketingQuestions}">
+			<p th:each="q : ${marketingQuestions}">
 				<label  for="qst" th:text="${q.description}"></label><br>
 				<input type="text" id="qst" name="${q.id}" required><br><br>
 			</p>

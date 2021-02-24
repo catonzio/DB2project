@@ -11,6 +11,8 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
+@NamedQuery(name="Question.findMQByQuestionnaireId", query = "SELECT q FROM Question q WHERE q.questionnaire = ?1 AND q.type = 'MARKETING'")
+@NamedQuery(name="Question.findFQByQuestionnaireId", query = "SELECT q FROM Question q WHERE q.questionnaire = ?1 AND q.type = 'FIXED'")
 public class Question implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -23,7 +25,7 @@ public class Question implements Serializable {
 
     private String description;
 
-    @ManyToOne
+    @ManyToOne()
     private Questionnaire questionnaire;
 
 }

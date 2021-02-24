@@ -29,11 +29,11 @@ public class Product implements Serializable {
     @Column(unique = true)
     private LocalDate productOfTheDay;
 
-    @OneToOne(mappedBy = "relatedProduct",fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
+    @OneToOne(mappedBy = "relatedProduct",fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
     private Questionnaire questionnaire;
 
     @OneToMany(mappedBy = "product", cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
-            CascadeType.REFRESH }, fetch = FetchType.EAGER)
+            CascadeType.REFRESH }, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Review> reviews;
 
     public Product() {
