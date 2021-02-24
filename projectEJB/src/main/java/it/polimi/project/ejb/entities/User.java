@@ -35,7 +35,7 @@ public class User implements Serializable {
 
     private LocalDateTime last_login;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.REMOVE,
             CascadeType.REFRESH })
     private List<Review> reviews;
 
@@ -45,12 +45,12 @@ public class User implements Serializable {
     }
 
     public void addReview(Review review) {
-        getReviews().add(review);
-        review.setUser(this);
+        if(review != null) {
+            getReviews().add(review);
+        }
     }
 
     public void addAnswer(UserAnswer answer) {
         this.answers.add(answer);
-        answer.setRelatedUser(this);
     }
 }

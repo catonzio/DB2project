@@ -17,6 +17,12 @@ public class ReviewService {
 
     public ReviewService() {}
 
+    public void saveReview(Review review) {
+        if(review != null) {
+            em.persist(review);
+        }
+    }
+
     public void createReview(int productId, int userId, String description){
         LocalDate date = LocalDate.now();
         User user = em.find(User.class, userId);

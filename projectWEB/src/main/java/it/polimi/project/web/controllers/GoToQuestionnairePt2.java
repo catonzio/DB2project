@@ -1,8 +1,7 @@
 package it.polimi.project.web.controllers;
 
-import it.polimi.project.ejb.entities.Product;
-import it.polimi.project.ejb.entities.Question;
-import it.polimi.project.ejb.entities.Questionnaire;
+import it.polimi.project.ejb.entities.*;
+import it.polimi.project.ejb.enums.QuestionType;
 import it.polimi.project.ejb.services.QuestionnaireService;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -16,13 +15,49 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @WebServlet("/QuestionnairePt2")
 public class GoToQuestionnairePt2 extends MyServlet {
+
     @EJB(name = "it.polimi.project.ejb.services/QuestionnaireService")
     private QuestionnaireService questionnaireService;
 
     @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        boolean userInSession = super.checkUserInSession(req, resp);
+        if(userInSession) {
+            HttpSession session = super.getSession(req, resp);
+            Questionnaire questionnaire = (Questionnaire) session.getAttribute("questionnaire");
+            User user = (User) session.getAttribute("user");
+
+            int numQuests = questionnaire.getQuestions().size();
+            UserAnswer userAnswer = new UserAnswer();
+            userAnswer.setRelatedUser(user);
+            userAnswer.setRelatedQuestionnaire(questionnaire);
+
+            for(int i=0; i<numQuests; i++) {
+                String answ = req.getParameter("answer"+(i+1));
+                userAnswer.addAnswer(questionnaire.getQuestions().get(i), answ);
+            }
+
+            Map<String, Object> sessionAttributes = new HashMap<>();
+            sessionAttributes.put("userAnswer", userAnswer);
+
+            Map<String, Object> modelAttributes = new HashMap<>();
+
+            List<String> fixedQuests = questionnaire.getQuestions().stream()
+                    .filter(question -> question.getType().equals(QuestionType.FIXED))
+                    .map(Question::getDescription)
+                    .collect(Collectors.toList());
+
+            modelAttributes.put("fixedQuestions", fixedQuests);
+
+            super.redirect(req, resp, "/WEB-INF/QuestionnairePt2.html", modelAttributes, sessionAttributes);
+        }
+    }
+
+    /*@Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // If the user is not logged in (not present in session) redirect to the login
         String loginpath = getServletContext().getContextPath() + "/index.html";
@@ -80,6 +115,6 @@ public class GoToQuestionnairePt2 extends MyServlet {
             path = "/WEB-INF/Home.html";
         }
         super.redirect(request, response, path, modelAttributes, null);
-    }
+    }*/
 
 }

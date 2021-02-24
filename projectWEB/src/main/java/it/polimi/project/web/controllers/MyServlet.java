@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Map;
 
 public class MyServlet extends HttpServlet {
@@ -48,6 +49,15 @@ public class MyServlet extends HttpServlet {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public boolean checkUserInSession(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String loginpath = getServletContext().getContextPath() + "/index.html";
+        HttpSession session = getSession(req, resp);
+        if (session == null || session.isNew() || session.getAttribute("user") == null) {
+            return false;
+        }
+        return true;
     }
 
     public HttpSession getSession(HttpServletRequest req, HttpServletResponse resp) {

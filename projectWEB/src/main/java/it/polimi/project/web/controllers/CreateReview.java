@@ -38,60 +38,67 @@ public class CreateReview extends MyServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         // If the user is not logged in (not present in session) redirect to the login
-        String loginpath = getServletContext().getContextPath() + "/index.html";
+        /*String loginpath = getServletContext().getContextPath() + "/index.html";
         HttpSession session = super.getSession(req, resp);
         if (session.isNew() || session.getAttribute("user") == null) {
             resp.sendRedirect(loginpath);
             return;
+        }*/
+
+        //Product productOfDay = productService.getProductOfDay();
+        //Map<String, Object> modelAttributes = new HashMap<>();
+        //modelAttributes.put("productOfDay", productOfDay);
+        if (super.checkUserInSession(req, resp)) {
+            String path = "/WEB-INF/WriteReview.html";
+            super.redirect(req, resp, path, null, null);
+        } else {
+            resp.sendRedirect("/db2-project/index.html");
         }
-
-        Product productOfDay = productService.getProductOfDay();
-        Map<String, Object> modelAttributes = new HashMap<>();
-        modelAttributes.put("productOfDay", productOfDay);
-        String path = "/WEB-INF/WriteReview.html";
-
-        super.redirect(req, resp, path, modelAttributes, null);
     }
 
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         // If the user is not logged in (not present in session) redirect to the login
-        String loginpath = getServletContext().getContextPath() + "/index.html";
+        /*String loginpath = getServletContext().getContextPath() + "/index.html";
         HttpSession session = super.getSession(req, resp);
         if (session.isNew() || session.getAttribute("user") == null) {
             resp.sendRedirect(loginpath);
             return;
+        }*/
+        if(super.checkUserInSession(req, resp)) {
+            // Get and parse all parameters from request
+            boolean isBadRequest = false;
+            String description = null;
+
+            description = req.getParameter("review").trim();
+            isBadRequest = description.isEmpty();
+            if (isBadRequest) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
+                return;
+            }
+
+            // Create review in DB
+            HttpSession session = super.getSession(req, resp);
+            User user = (User) session.getAttribute("user");
+            Product prd = (Product) session.getAttribute("productOfDay");
+
+            Review newReview = new Review(LocalDate.now(), description, user, prd);
+            prd.addReview(newReview);
+            user.addReview(newReview);
+            //Product prd = productService.getProductOfDay();
+            try {
+                reviewService.saveReview(newReview);
+            } catch (Exception e) {
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create review");
+                return;
+            }
+            //Product prd2 = productService.getProductOfDay();
+            Map<String, Object> sessionAttributes = new HashMap<>();
+            sessionAttributes.put("productOfDay", prd);
+            String path = "/WEB-INF/Home.html";
+
+            super.redirect(req, resp, path, null, sessionAttributes);
         }
-
-
-        // Get and parse all parameters from request
-        boolean isBadRequest = false;
-        String description = null;
-
-        description =  StringEscapeUtils.escapeJava(req.getParameter("review"));
-        isBadRequest = description.isEmpty();
-        if (isBadRequest) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
-            return;
-        }
-
-       // Create review in DB
-        User user = (User) session.getAttribute("user");
-        //Product prd = (Product) super.getContext(req, resp).getVariable("productOfDay");
-        Product prd = productService.getProductOfDay();
-        try {
-            reviewService.createReview(prd.getId(), user.getId(), description);
-        } catch (Exception e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create review");
-            return;
-        }
-
-        Map<String, Object> modelAttributes = new HashMap<>();
-        modelAttributes.put("productOfDay", prd);
-        String path = "/WEB-INF/Home.html";
-
-        super.redirect(req, resp, path, modelAttributes, null);
-
     }
 }

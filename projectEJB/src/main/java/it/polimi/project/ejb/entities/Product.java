@@ -32,7 +32,7 @@ public class Product implements Serializable {
     @OneToOne(mappedBy = "relatedProduct",fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
     private Questionnaire questionnaire;
 
-    @OneToMany(mappedBy = "product", cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
+    @OneToMany(mappedBy = "product", cascade = { CascadeType.REMOVE,
             CascadeType.REFRESH }, fetch = FetchType.EAGER)
     private List<Review> reviews;
 
@@ -45,7 +45,8 @@ public class Product implements Serializable {
     }
 
     public void addReview(Review review) {
-        getReviews().add(review);
-        review.setProduct(this);
+        if(review != null) {
+            getReviews().add(review);
+        }
     }
 }

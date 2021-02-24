@@ -25,19 +25,11 @@ public class GoToHomePage extends MyServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		// If the user is not logged in (not present in session) redirect to the login
-		String loginpath = getServletContext().getContextPath() + "/index.html";
-		HttpSession session = super.getSession(req, resp);
-		if (session.isNew() || session.getAttribute("user") == null) {
-			resp.sendRedirect(loginpath);
-			return;
+		if(super.checkUserInSession(req, resp)) {
+			super.redirect(req, resp, "/WEB-INF/Home.html", null, null);
+		} else {
+			resp.sendRedirect("/db2-project/index.html");
 		}
-
-		Product productOfDay = productService.getProductOfDay();
-		Map<String, Object> modelAttributes = new HashMap<>();
-		modelAttributes.put("productOfDay", productOfDay);
-		String path = "/WEB-INF/Home.html";
-
-		super.redirect(req, resp, path, modelAttributes, null);
 	}
 
 }
