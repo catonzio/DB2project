@@ -29,7 +29,7 @@ public class Product implements Serializable {
     @Column(unique = true)
     private LocalDate productOfTheDay;
 
-    @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "relatedProduct",fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
     private Questionnaire questionnaire;
 
     @OneToMany(mappedBy = "product", cascade = { CascadeType.PERSIST, CascadeType.REMOVE,

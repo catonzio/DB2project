@@ -3,6 +3,7 @@ package it.polimi.project.web.controllers;
 import it.polimi.project.ejb.entities.Product;
 import it.polimi.project.ejb.entities.Question;
 import it.polimi.project.ejb.entities.Questionnaire;
+import it.polimi.project.ejb.enums.QuestionType;
 import it.polimi.project.ejb.services.ProductService;
 import it.polimi.project.ejb.services.QuestionnaireService;
 import org.apache.commons.io.IOUtils;
@@ -49,10 +50,11 @@ public class InsertProduct extends MyServlet {
             Product p = extractProduct(req);
             p.setPhotoimage(bytes);
 
-            q.setProduct(p);
+            q.setRelatedProduct(p);
             p.setQuestionnaire(q);
 
-            if(productService.saveNewProduct(p) && questionnaireService.saveQuestionnaire(q)) {
+            // && questionnaireService.saveQuestionnaire(q)
+            if(productService.saveNewProduct(p)) {
                 redirect(req, resp, "Correctly saved!");
             } else {
                 redirect(req, resp, "Unable to save the product.");
@@ -70,27 +72,25 @@ public class InsertProduct extends MyServlet {
     private Questionnaire extractQuestionnaire(HttpServletRequest req) throws Exception {
         Questionnaire q = new Questionnaire();
         List<String> variableQuestions = new ArrayList<>();
-        List<String> variableAnswers = new ArrayList<>();
-        int i = 1;
-        //Get all the questions and the answers; since their number is not fixed, we try until we find.
-        while(true) {
-            String questParam = req.getParameter("question"+i);
-            String answerParam = req.getParameter("answer"+i);
-            if(questParam != null && answerParam != null) {
-                variableQuestions.add(questParam);
-                variableAnswers.add(answerParam);
-                i++;
-            } else
-                break;
-        }
-        if(variableQuestions.size() != variableAnswers.size())
-            throw new Exception("Different number of questions and answers!");
-        for(i = 0; i<variableQuestions.size(); i++) {
-            Question question = new Question();
-            question.setDescription(variableQuestions.get(i));
-            question.setAnswer(variableAnswers.get(i));
-            question.setType("marketing");
-            q.addMarketingQuestion(question);
+        try {
+            String numStr = req.getParameter("questions_counter");
+            int numberOfQuestions = Integer.parseInt(numStr);
+            for(int i=0; i<numberOfQuestions; i++) {
+                String questParam = req.getParameter("question"+(i+1));
+                if(questParam != null) {
+                    variableQuestions.add(questParam);
+                }
+            }
+            if(variableQuestions.size() != numberOfQuestions)
+                throw new Exception("Different number of questions and counter!");
+            for(String variableQuestion : variableQuestions) {
+                Question question = new Question();
+                question.setDescription(variableQuestion);
+                question.setType(QuestionType.MARKETING);
+                q.addMarketingQuestion(question);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return q;
     }

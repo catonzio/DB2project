@@ -46,7 +46,6 @@ public class GoToQuestionnairePt2 extends MyServlet {
         if(mqsts != null && !mqsts.isEmpty()) {
             mqsts.forEach(question -> {
                 String answer = StringEscapeUtils.escapeJava(request.getParameter("question.id"));
-                question.setAnswer(answer);
             });
         }
 
@@ -66,7 +65,7 @@ public class GoToQuestionnairePt2 extends MyServlet {
         List<Question> fqsts = questionnaire.getFixedQuestions();
         fqsts.forEach(question -> {
             String answer = StringEscapeUtils.escapeJava(request.getParameter("question.id"));
-            question.setAnswer(answer);
+            //question.setAnswer(answer);
         });
 
         boolean result = questionnaireService.saveQuestionnaire(questionnaire);

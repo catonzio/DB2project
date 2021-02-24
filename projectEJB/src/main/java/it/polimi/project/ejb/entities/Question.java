@@ -1,13 +1,16 @@
 package it.polimi.project.ejb.entities;
 
+import it.polimi.project.ejb.enums.QuestionType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Data
-//@NamedQuery(name="Question.getFixedQuestions", query = "SELECT q FROM Question q WHERE q.type LIKE 'user'")
+@Getter
+@Setter
 public class Question implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -15,12 +18,10 @@ public class Question implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    //type = {user, product}
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private QuestionType type;
 
     private String description;
-
-    private String answer;
 
     @ManyToOne
     private Questionnaire questionnaire;

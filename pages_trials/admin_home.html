@@ -31,7 +31,7 @@
 			<div class="col-md-6 col-sm-12">
 				<div class="right upload-product_form" id="product_upload">
 					<form enctype="multipart/form-data">
-						<p id="questions_counter" name="questions_counter" style="display: none">1</p>
+						<input type="text" id="questions_counter" name="questions_counter" value="1" style="visibility: hidden"></input>
 						<div class="form-group">
 							<label>Product name</label>
 						 	<input type="text" class="form-control" placeholder="Product name">
@@ -57,19 +57,11 @@
 								</div>
 							</div>
 							<div id="table-questionnaire">
-								<div class="ext-row row">
-									<div class="row">
-										<div class="col-9">
-											<input type="text" class="form-control" name="question1" id="question1" placeholder="Question #1">	
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-9">
-											<input type="text" class="form-control" name="answer1" id="answer1" placeholder="Answer #1">	
-										</div>
+								<div class="row">
+									<div class="col-9">
+										<input type="text" class="form-control" name="question1" id="question1" placeholder="Question #1">
 									</div>
 								</div>
-								
 							</div>
 	                    </div>
 					  	<input type="submit" class="btn btn-primary">
@@ -128,12 +120,12 @@
 	<script type="text/javascript">
 		function delete_all_questions() {
 			let div_quest = document.getElementById("table-questionnaire");
-			let rows = div_quest.getElementsByClassName("ext-row");
+			let rows = div_quest.getElementsByClassName("row");
 			console.log(rows.length)
-			for(var i=rows.length-1; i>=0; i--) {
+			for(let i=rows.length-1; i>=0; i--) {
 				let inp = rows[i].getElementsByTagName("input")[0];
-				num = parseInt(inp.id.substr(inp.id.length - 1));
-				if(num != 1) {
+				let num = parseInt(inp.id.substr(inp.id.length - 1));
+				if(num !== 1) {
 					console.log("Removing " + num);
 					rows[i].remove();
 				}
@@ -143,20 +135,14 @@
 
 		function refresh_questions() {
 			let div_quest = document.getElementById("table-questionnaire");
-			let ext_rows = div_quest.getElementsByClassName("ext-row");
-			let count = ext_rows.length;
-			document.getElementById("questions_counter").innerText = count.toString();
-			for(let i=1; i<=count; i++) {
-				let inputs = ext_rows[i].getElementsByTagName("input");
-				let quest = inputs[0];
-				let answ = inputs[1];
-				quest.placeholder = "Question #"+i;
-				quest.id = "question"+i;
-				quest.name = "question"+i;
-
-				answ.placeholder = "Answer #"+i;
-				answ.id = "answer"+i;
-				answ.name = "answer"+i;
+			let rows = div_quest.getElementsByClassName("row");
+			let count = rows.length;
+			document.getElementById("questions_counter").value = count.toString();
+			for(let i=0; i<count; i++) {
+				let quest = rows[i].getElementsByTagName("input")[0];
+				quest.placeholder = "Question #"+(i+1);
+				quest.id = "question"+(i+1);
+				quest.name = "question"+(i+1);
 			}
 		}
 
@@ -166,14 +152,9 @@
             let lastQuestion = inputs[inputs.length-1].id.substr(inputs[inputs.length-1].id.length - 1);
             lastQuestion = parseInt(lastQuestion) + 1;
 
-            let new_ext_row = document.createElement("div");
-            new_ext_row.classList.add("ext-row");
-			new_ext_row.classList.add("row");
-			div_quest.appendChild(new_ext_row);
-
             let new_row = document.createElement("div");
             new_row.classList.add("row");
-            new_ext_row.appendChild(new_row);
+			div_quest.appendChild(new_row);
 
             let new_inp_div = document.createElement("div");
             new_inp_div.classList.add("col-9");
@@ -199,25 +180,9 @@
             new_btn.value = "-";
             new_btn.type = "button";
             new_btn.title = "Delete question #"+lastQuestion;
-            new_btn.onclick = function() {delete_question(new_ext_row);};
+            new_btn.onclick = function() {delete_question(new_row);};
 
             new_btn_div.appendChild(new_btn);
-
-			let new_answ_row = document.createElement("div");
-			new_answ_row.classList.add("row");
-			new_ext_row.appendChild(new_answ_row);
-
-			let new_answ_div = document.createElement("div");
-			new_inp_div.classList.add("col-6");
-			new_answ_row.appendChild(new_answ_div);
-
-			let new_answ = document.createElement("input");
-			new_answ.id = "answer"+lastQuestion;
-			new_answ.classList.add("form-control");
-			new_answ.name = "answer"+lastQuestion;
-			new_answ.placeholder = "Answer #"+lastQuestion;
-
-			new_answ_div.appendChild(new_answ);
 
 			refresh_questions();
 		}

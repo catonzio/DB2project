@@ -1,6 +1,9 @@
 package it.polimi.project.ejb.entities;
 
+import it.polimi.project.ejb.enums.QuestionType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
-
+@Getter
+@Setter
 public class Questionnaire implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -18,17 +21,43 @@ public class Questionnaire implements Serializable {
     private int id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    private Product product;
+    private Product relatedProduct;
 
-    @OneToMany(mappedBy = "questionnaire")
+    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST })
     private List<Question> marketingQuestions;
 
-    @OneToMany(mappedBy = "questionnaire")
+    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST })
     private List<Question> fixedQuestions;
 
     public Questionnaire() {
         this.marketingQuestions = new ArrayList<>();
         this.fixedQuestions = new ArrayList<>();
+        this.createFixedQuestions();
+    }
+
+    private void createFixedQuestions() {
+        List<Question> fixedQuestions = new ArrayList<>();
+        Question q1 = new Question();
+        q1.setDescription("What is your age?");
+        q1.setType(QuestionType.FIXED);
+        fixedQuestions.add(q1);
+        Question q2 = new Question();
+        q2.setDescription("What is your sex?");
+        q2.setType(QuestionType.FIXED);
+        fixedQuestions.add(q2);
+        Question q3 = new Question();
+        q3.setDescription("What is your expertise level?");
+        q3.setType(QuestionType.FIXED);
+        fixedQuestions.add(q3);
+
+        this.setFixedQuestions(fixedQuestions);
+    }
+
+    public void setFixedQuestions(List<Question> fixedQuestions) {
+        fixedQuestions.forEach(el -> {
+            el.setQuestionnaire(this);
+            this.fixedQuestions.add(el);
+        });
     }
 
     public void addMarketingQuestion(Question q) {

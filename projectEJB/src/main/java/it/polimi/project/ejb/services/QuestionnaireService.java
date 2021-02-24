@@ -20,8 +20,11 @@ public class QuestionnaireService {
 
     public boolean saveQuestionnaire(Questionnaire q) {
         try {
-            em.persist(q);
-            return true;
+            if(q != null) {
+                em.persist(q);
+                return true;
+            } else
+                return false;
         }
         catch (Exception ex) {
             ex.printStackTrace();
