@@ -38,15 +38,15 @@ public class Questionnaire implements Serializable {
     private void createFixedQuestions() {
         List<Question> fixedQuestions = new ArrayList<>();
         Question q1 = new Question();
-        q1.setDescription("What is your age?");
+        q1.setDescription("My age is..");
         q1.setType(QuestionType.FIXED);
         fixedQuestions.add(q1);
         Question q2 = new Question();
-        q2.setDescription("What is your sex?");
+        q2.setDescription("I identify my gender as..");
         q2.setType(QuestionType.FIXED);
         fixedQuestions.add(q2);
         Question q3 = new Question();
-        q3.setDescription("What is your expertise level?");
+        q3.setDescription("My expertise level is.. [Low, Medium, High]");
         q3.setType(QuestionType.FIXED);
         fixedQuestions.add(q3);
 

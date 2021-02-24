@@ -9,6 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -17,14 +19,14 @@ public class UserService {
     @PersistenceContext(name = "DB2Project")
     private EntityManager em;
 
-    public UserService() {}
+    public UserService() {
+    }
 
     public boolean saveUser(User u) {
         try {
             em.persist(u);
             return true;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }
@@ -40,8 +42,12 @@ public class UserService {
         }
         if (uList.isEmpty())
             return null;
-        else if (uList.size() == 1)
+        else if (uList.size() == 1) {
+            User user = uList.get(0);
+            user.setLast_login(LocalDateTime.now());
+            em.merge(user);
             return uList.get(0);
+        }
         throw new NonUniqueResultException("More than one user registered with same credentials");
 
     }

@@ -1,11 +1,11 @@
 package it.polimi.project.ejb.entities;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +32,8 @@ public class User implements Serializable {
     private String surname;
     private Boolean is_blocked;
     private int points;
+
+    private LocalDateTime last_login;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
             CascadeType.REFRESH })
