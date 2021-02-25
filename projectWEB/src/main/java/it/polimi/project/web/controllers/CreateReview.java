@@ -3,9 +3,11 @@ package it.polimi.project.web.controllers;
 import it.polimi.project.ejb.entities.Product;
 import it.polimi.project.ejb.entities.Review;
 import it.polimi.project.ejb.entities.User;
+import it.polimi.project.ejb.entities.UserAnswer;
 import it.polimi.project.ejb.exceptions.CredentialsException;
 import it.polimi.project.ejb.services.ProductService;
 import it.polimi.project.ejb.services.ReviewService;
+import it.polimi.project.ejb.services.UserAnswerService;
 import it.polimi.project.ejb.services.UserService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.context.WebContext;
@@ -31,8 +33,10 @@ public class CreateReview extends MyServlet {
 
     @EJB(name = "it.polimi.project.ejb.services/ReviewService")
     private ReviewService reviewService;
-    @EJB(name = "it.polimi.project.ejb.services/ProductService")
-    private ProductService productService;
+    @EJB(name = "it.polimi.project.ejb.services/UserAnswerService")
+    private UserAnswerService userAnswerService;
+    @EJB(name = "it.polimi.project.ejb.services/UserService")
+    private UserService userService;
 
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -66,6 +70,9 @@ public class CreateReview extends MyServlet {
             resp.sendRedirect(loginpath);
             return;
         }*/
+        HttpSession session = super.getSession(req, resp);
+        User user = (User) session.getAttribute("user");
+
         if(super.checkUserInSession(req, resp)) {
             // Get and parse all parameters from request
             boolean isBadRequest = false;
@@ -77,10 +84,21 @@ public class CreateReview extends MyServlet {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
                 return;
             }
+            Boolean result = userAnswerService.checkForBadWords(description);
+            if(result){
+                userService.blockUser(user);
+                session = req.getSession(false);
+                if (session != null) {
+                    session.invalidate();
+                }
+                String path = getServletContext().getContextPath() + "/Blocked.html";
+                resp.sendRedirect(path);
+                return;
+            }
 
             // Create review in DB
-            HttpSession session = super.getSession(req, resp);
-            User user = (User) session.getAttribute("user");
+            //HttpSession session = super.getSession(req, resp);
+            //User user = (User) session.getAttribute("user");
             Product prd = (Product) session.getAttribute("productOfDay");
 
             Review newReview = new Review(LocalDate.now(), description, user, prd);

@@ -22,7 +22,7 @@ public class ViewLeaderboard extends MyServlet {
     private UserAnswerService userAnswerService;
     @EJB(name = "it.polimi.project.ejb.services/QuestionnaireService")
     private QuestionnaireService questionnaireService;
-
+/*
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(super.checkUserInSession(req, resp)) {
@@ -53,10 +53,10 @@ public class ViewLeaderboard extends MyServlet {
             //super.redirect(req, resp, "/WEB-INF/Home.html", null, null);
         }
     }
-
-    /*@Override
+*/
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(super.checkUserInSession(req, resp)) {
+        if (super.checkUserInSession(req, resp)) {
 
             Product productOfDay = (Product) super.getSession(req, resp).getAttribute("productOfDay");
             Questionnaire questionnaire;
@@ -66,8 +66,12 @@ public class ViewLeaderboard extends MyServlet {
                 if (questionnaire != null) {
                     String path = "/WEB-INF/Leaderboard.html";
 
-                    questionnaireService.persistQuestionnaire(questionnaire);
+                    questionnaireService.mergeQuestionnaire(questionnaire);
                     List<UserAnswer> userAnswers = questionnaire.getAnswers();
+                    userAnswers.forEach( a -> {
+                        userAnswerService.mergeAnswer(a);
+                    });
+                    //userAnswerService.mergeAnswers(userAnswers);
                     // List<UserAnswer> userAnswers= userAnswerService.findUserAnswersByQuestionnaire(questionnaire);
 
                     Map<String, Object> modelAttributes = new HashMap<>();
@@ -77,6 +81,8 @@ public class ViewLeaderboard extends MyServlet {
 
                 }
             }
-        }*/
+        }
+
+    }
 }
 

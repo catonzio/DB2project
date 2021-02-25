@@ -26,7 +26,7 @@ public class UserAnswer {
     @ElementCollection
     private Map<Question, String> answers;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne(cascade = {CascadeType.REFRESH})
     private Questionnaire relatedQuestionnaire;
 
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH})

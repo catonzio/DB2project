@@ -6,6 +6,7 @@ import it.polimi.project.ejb.entities.User;
 import it.polimi.project.ejb.entities.UserAnswer;
 import it.polimi.project.ejb.enums.QuestionType;
 import it.polimi.project.ejb.services.UserAnswerService;
+import it.polimi.project.ejb.services.UserService;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -24,6 +25,10 @@ public class QuestionnaireCompleted extends MyServlet {
 
     @EJB(name = "it.polimi.project.ejb.services/UserAnswerService")
     private UserAnswerService userAnswerService;
+    @EJB(name = "it.polimi.project.ejb.services/UserService")
+    private UserService userService;
+
+    private Boolean result;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -46,28 +51,61 @@ public class QuestionnaireCompleted extends MyServlet {
             HttpSession session = super.getSession(req, resp);
             Questionnaire questionnaire = (Questionnaire) session.getAttribute("questionnaire");
             UserAnswer userAnswer = (UserAnswer) session.getAttribute("userAnswer");
-            if(userAnswer != null) {
-                session.removeAttribute("userAnswer");
-                List<Question> fixedQuestions = questionnaire.getQuestions().stream()
-                        .filter(el -> el.getType()
-                                .equals(QuestionType.FIXED))
-                        .collect(Collectors.toList());
-                for(int i=0; i<fixedQuestions.size(); i++) {
-                    String answ = req.getParameter("answer" + (i + 1));
-                    userAnswer.addAnswer(fixedQuestions.get(i), answ);
-                }
+            User user = (User) session.getAttribute("user");
 
-                String path = "/WEB-INF/QuestionnaireCompleted.html";
-                if(userAnswerService.saveSubmittedUserAnswer(userAnswer)) {
-                    Map<String, Object> sessionAttributes = new HashMap<>();
-                    sessionAttributes.put("userAnswer", userAnswer);
-                    super.redirect(req, resp, path, null, sessionAttributes);
-                } else {
-                    Map<String, Object> modelAttributes = new HashMap<>();
-                    modelAttributes.put("errorMsg", "Failed to save answers.");
-                    super.redirect(req, resp, path, modelAttributes, null);
+            //result = (Boolean) super.getContext(req, resp).getVariable("badwords");
+            result = (Boolean) session.getAttribute("badwords");
+            if(result != null && result){
+                userService.blockUser(user);
+                session = req.getSession(false);
+                if (session != null) {
+                    session.invalidate();
+                }
+                String path = getServletContext().getContextPath() + "/Blocked.html";
+                resp.sendRedirect(path);
+                return;
+            }
+
+
+
+            List<Question> fixedQuestions = questionnaire.getQuestions().stream()
+                                                        .filter(el -> el.getType()
+                                                        .equals(QuestionType.FIXED))
+                                                        .collect(Collectors.toList());
+            for(int i=0; i<fixedQuestions.size(); i++) {
+                if(fixedQuestions.get(i).getType().equals(QuestionType.FIXED)) {
+                    String answ = req.getParameter("answer" + (i + 1));
+                    if(answ != null && !answ.isEmpty()){
+
+                        result = userAnswerService.checkForBadWords(answ);
+                        if(result){
+                            userService.blockUser(user);
+                            session = req.getSession(false);
+                            if (session != null) {
+                                session.invalidate();
+                            }
+                            String path = getServletContext().getContextPath() + "/Blocked.html";
+                            resp.sendRedirect(path);
+                            return;
+                        }
+                        userAnswer.addAnswer(fixedQuestions.get(i), answ);
+
+                    }
                 }
             }
+
+            String path = "/WEB-INF/QuestionnaireCompleted.html";
+            if(userAnswerService.saveUserAnswer(userAnswer)) {
+                userAnswerService.mergeAnswer(userAnswer);
+                Map<String, Object> sessionAttributes = new HashMap<>();
+                sessionAttributes.put("userAnswer", userAnswer);
+                super.redirect(req, resp, path, null, sessionAttributes);
+            } else {
+                Map<String, Object> modelAttributes = new HashMap<>();
+                modelAttributes.put("errorMsg", "Failed to save answers.");
+                super.redirect(req, resp, path, modelAttributes, null);
+            }
+
         }
     }
 }
