@@ -40,7 +40,6 @@ public class GoToQuestionnairePt2 extends MyServlet {
 
             UserAnswer userAnswer = new UserAnswer();
             userAnswer.setRelatedUser(user);
-            userAnswer.setRelatedQuestionnaire(questionnaire);
 
             List<Question> marketingQuestions = questionnaire.getQuestions().stream()
                                                             .filter(el -> el.getType()

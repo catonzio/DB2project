@@ -58,6 +58,7 @@
                     <h4>Error in saving the questionnaire</h4>
                 </div>
             </div>
+            <h3 th:unless="${session.userAnswer != null}">You have cancelled this questionnaire!</h3>
         </div>
 
     </div>

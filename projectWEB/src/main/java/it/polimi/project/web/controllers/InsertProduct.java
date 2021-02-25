@@ -40,43 +40,47 @@ public class InsertProduct extends MyServlet {
         InputStream fileContent = null;
         LocalDate date = LocalDate.parse(req.getParameter("date"));
 
-        if(isPresentDate(date))
+        if(isPresentDate(date)) {
             redirect(req, resp, "Already exists a product for this day.");
+        }
 
-        if(fileName == null || (!fileName.endsWith(".jpg") && !fileName.endsWith(".png")))
+        else if(fileName == null || (!fileName.endsWith(".jpg") && !fileName.endsWith(".png"))) {
             redirect(req, resp, "Image format not correct.");
+        }
 
-        try {
-            fileContent = filePart.getInputStream();
-            byte[] bytes = IOUtils.toByteArray(fileContent);
+        else {
+            try {
+                fileContent = filePart.getInputStream();
+                byte[] bytes = IOUtils.toByteArray(fileContent);
 
-            Questionnaire q = extractQuestionnaire(req);
+                Questionnaire q = extractQuestionnaire(req);
 
-            String name = req.getParameter("name");
+                String name = req.getParameter("name");
 
-            Product p = new Product();
-            p.setName(name);
-            p.setProductOfTheDay(date);
+                Product p = new Product();
+                p.setName(name);
+                p.setProductOfTheDay(date);
 
-            p.setPhotoimage(bytes);
+                p.setPhotoimage(bytes);
 
-            //questionnaireService.saveQuestionnaire(q, p);
+                //questionnaireService.saveQuestionnaire(q, p);
 
-            q.setRelatedProduct(p);
-            p.setQuestionnaire(q);
+                q.setRelatedProduct(p);
+                p.setQuestionnaire(q);
 
-            // && questionnaireService.saveQuestionnaire(q)
-            if(productService.saveNewProduct(p)) {
-                redirect(req, resp, "Correctly saved!");
-            } else {
-                redirect(req, resp, "Unable to save the product.");
-            }
+                // && questionnaireService.saveQuestionnaire(q)
+                if (productService.saveNewProduct(p)) {
+                    redirect(req, resp, "Correctly saved!");
+                } else {
+                    redirect(req, resp, "Unable to save the product.");
+                }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            if(fileContent != null) {
-                fileContent.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (fileContent != null) {
+                    fileContent.close();
+                }
             }
         }
     }

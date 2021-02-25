@@ -1,5 +1,6 @@
 package it.polimi.project.web.controllers;
 
+import it.polimi.project.ejb.entities.Questionnaire;
 import it.polimi.project.ejb.entities.User;
 import it.polimi.project.ejb.entities.UserAnswer;
 import it.polimi.project.ejb.services.UserAnswerService;
@@ -23,9 +24,13 @@ public class CancelAnswer extends MyServlet {
         if(super.checkUserInSession(req, resp)) {
             HttpSession session = super.getSession(req, resp);
             UserAnswer userAnswer = (UserAnswer) session.getAttribute("userAnswer");
+
             if(userAnswer != null) {
+                Questionnaire questionnaire = (Questionnaire) session.getAttribute("questionnaire");
+                userAnswer.setRelatedQuestionnaire(questionnaire);
                 session.removeAttribute("userAnswer");
                 userAnswer.getAnswers().forEach((k, v) -> v = null);
+
                 if(userAnswerService.saveCanceledUserAnswer(userAnswer))
                     super.redirect(req, resp, "/WEB-INF/Home.html", null, null);
             }

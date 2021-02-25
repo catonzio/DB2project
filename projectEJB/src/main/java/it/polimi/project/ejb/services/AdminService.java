@@ -25,7 +25,8 @@ public class AdminService {
                     .setParameter(2, pwd)
                     .getResultList();
         } catch (PersistenceException e) {
-            throw new CredentialsException("Could not verify credentials");
+            //throw new CredentialsException("Could not verify credentials");
+            e.printStackTrace();
         }
         if (aList.isEmpty())
             return null;

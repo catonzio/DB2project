@@ -41,10 +41,13 @@
                         <td th:text="${quest.relatedProduct.productOfTheDay}"></td>
                         <td th:text="${quest.answers.size()}"></td>
                         <td><button class="btn btn-insert" th:onclick="'inspect_quest('+${quest.id}+');'" value="Inspect">Inspect</button></td>
-                        <td><button class="btn btn-delete" value="Delete">Delete</button></td>
+                        <td><a th:href="'DeleteQuestionnaire?questId='+${quest.id}" class="btn btn-delete" value="Delete">Delete</a></td>
                     </tr>
                 </tbody>
             </table>
+            <div th:if="${errorMsg}">
+                <h3 th:text="${errorMsg}"></h3>
+            </div>
         </div>
     </div>
 

@@ -68,4 +68,17 @@ public class QuestionnaireService {
             return null;
         }
     }
+
+    public boolean remove(Questionnaire questionnaire) {
+        try {
+            if(!em.contains(questionnaire)) {
+                questionnaire = em.merge(questionnaire);
+            }
+            em.remove(questionnaire);
+            return true;
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
 }

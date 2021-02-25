@@ -22,14 +22,14 @@ public class Questionnaire implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true/*,  cascade = { CascadeType.PERSIST, CascadeType.REMOVE }*/)
+    @OneToOne(fetch = FetchType.EAGER/*,  cascade = { CascadeType.PERSIST, CascadeType.REMOVE }*/)
     @JoinColumn(unique = true)
     private Product relatedProduct;
 
-    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
+    @OneToMany(mappedBy = "questionnaire", orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
     private List<Question> questions;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "relatedQuestionnaire", cascade = {CascadeType.REFRESH})
+    @OneToMany(orphanRemoval = true, mappedBy = "relatedQuestionnaire", cascade = {CascadeType.REFRESH})
     @OrderBy("pointsEarned DESC")
     private List<UserAnswer> answers;
 

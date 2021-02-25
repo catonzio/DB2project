@@ -4,6 +4,7 @@ import it.polimi.project.ejb.entities.Question;
 import it.polimi.project.ejb.entities.Questionnaire;
 import it.polimi.project.ejb.entities.User;
 import it.polimi.project.ejb.entities.UserAnswer;
+import it.polimi.project.ejb.enums.AnswerStatus;
 import it.polimi.project.ejb.enums.QuestionType;
 import it.polimi.project.ejb.services.UserAnswerService;
 import it.polimi.project.ejb.services.UserService;
@@ -39,7 +40,8 @@ public class QuestionnaireCompleted extends MyServlet {
 
             if(user != null && questionnaire != null) {
                 UserAnswer userAnswer = user.getAnswerByQuestionnaire(questionnaire);
-                session.setAttribute("userAnswer", userAnswer);
+                if(userAnswer.getStatus().equals(AnswerStatus.SUBMITTED))
+                    session.setAttribute("userAnswer", userAnswer);
                 super.redirect(req, resp, "/WEB-INF/QuestionnaireCompleted.html", null, null);
             }
         }
@@ -52,6 +54,8 @@ public class QuestionnaireCompleted extends MyServlet {
             Questionnaire questionnaire = (Questionnaire) session.getAttribute("questionnaire");
             UserAnswer userAnswer = (UserAnswer) session.getAttribute("userAnswer");
             User user = (User) session.getAttribute("user");
+
+            userAnswer.setRelatedQuestionnaire(questionnaire);
 
             //result = (Boolean) super.getContext(req, resp).getVariable("badwords");
             result = (Boolean) session.getAttribute("badwords");
@@ -66,8 +70,6 @@ public class QuestionnaireCompleted extends MyServlet {
                 return;
             }
 
-
-
             List<Question> fixedQuestions = questionnaire.getQuestions().stream()
                                                         .filter(el -> el.getType()
                                                         .equals(QuestionType.FIXED))
@@ -78,7 +80,7 @@ public class QuestionnaireCompleted extends MyServlet {
                     if(answ != null && !answ.isEmpty()){
 
                         result = userAnswerService.checkForBadWords(answ);
-                        if(result){
+                        if(result) {
                             userService.blockUser(user);
                             session = req.getSession(false);
                             if (session != null) {
@@ -95,7 +97,7 @@ public class QuestionnaireCompleted extends MyServlet {
             }
 
             String path = "/WEB-INF/QuestionnaireCompleted.html";
-            if(userAnswerService.saveUserAnswer(userAnswer)) {
+            if(userAnswerService.saveSubmittedUserAnswer(userAnswer)) {
                 userAnswerService.mergeAnswer(userAnswer);
                 Map<String, Object> sessionAttributes = new HashMap<>();
                 sessionAttributes.put("userAnswer", userAnswer);

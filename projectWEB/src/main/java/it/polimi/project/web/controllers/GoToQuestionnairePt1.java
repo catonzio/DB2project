@@ -34,8 +34,9 @@ public class GoToQuestionnairePt1 extends MyServlet {
             Product productOfDay = (Product) super.getSession(req, resp).getAttribute("productOfDay");
             Questionnaire questionnaire;
 
-            if(productOfDay != null && productService.refreshProduct(productOfDay)) {
-                questionnaire = productOfDay.getQuestionnaire();
+            if(productOfDay != null) {
+                //questionnaire = productOfDay.getQuestionnaire();
+                questionnaire = questionnaireService.findQuestionnaireByProdId(productOfDay);
                 if(questionnaire != null) {
                     String path = "/WEB-INF/QuestionnairePt1.html";
 

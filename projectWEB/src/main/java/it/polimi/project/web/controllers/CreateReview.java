@@ -113,14 +113,11 @@ public class CreateReview extends MyServlet {
                 return;
             }
 
-            if(productService.refreshProduct(prd)) {
-                //Product prd2 = productService.getProductOfDay();
-                Map<String, Object> sessionAttributes = new HashMap<>();
-                sessionAttributes.put("productOfDay", prd);
-                String path = "/WEB-INF/Home.html";
+            Map<String, Object> sessionAttributes = new HashMap<>();
+            sessionAttributes.put("productOfDay", prd);
+            String path = "/WEB-INF/Home.html";
 
-                super.redirect(req, resp, path, null, sessionAttributes);
+            super.redirect(req, resp, path, null, sessionAttributes);
             }
-        }
     }
 }

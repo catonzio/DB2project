@@ -25,8 +25,8 @@ public class User implements Serializable {
     @Column(unique = true)
     private String email;
 
-    @OneToMany(orphanRemoval = true, cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<UserAnswer> answers;
+    //@OneToMany(cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true)
+    //private List<UserAnswer> answers;
 
     private String password;
     private String name;
@@ -40,7 +40,7 @@ public class User implements Serializable {
     private List<Review> reviews;
 
     public User() {
-        this.answers = new ArrayList<>();
+        //this.answers = new ArrayList<>();
         this.reviews = new ArrayList<>();
         is_blocked = false;
     }
@@ -52,7 +52,7 @@ public class User implements Serializable {
     }
 
     public void addAnswer(UserAnswer answer) {
-        this.answers.add(answer);
+        //this.answers.add(answer);
     }
 
     public UserAnswer getAnswerByQuestionnaire(Questionnaire questionnaire) {
@@ -62,7 +62,6 @@ public class User implements Serializable {
                 answer = el;
         }
         return answer;
-
-
     }
+
 }

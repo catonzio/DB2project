@@ -30,7 +30,6 @@ public class UserAnswer {
     private Questionnaire relatedQuestionnaire;
 
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(unique = true)
     private User relatedUser;
 
     @Enumerated(EnumType.STRING)
@@ -48,8 +47,8 @@ public class UserAnswer {
     }
 
     public void setRelatedUser(User relatedUser) {
+        this.relatedUser = relatedUser;
         if(relatedUser != null) {
-            this.relatedUser = relatedUser;
             relatedUser.addAnswer(this);
         }
     }
