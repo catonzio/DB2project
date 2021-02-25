@@ -75,7 +75,7 @@ public class Registration extends MyServlet {
             path = "/WEB-INF/Registration.html";
         } else {
             sessionAttributes.put("user", user);
-            modelAttributes.put("productOfDay", productService.getProductOfDay());
+            sessionAttributes.put("productOfDay", productService.getProductOfDay());
             path = "/WEB-INF/Home.html";
         }
         super.redirect(request, response, path, modelAttributes, sessionAttributes);

@@ -57,6 +57,11 @@ public class QuestionnaireService {
         }
     }
 
+    public void persistQuestionnaire(Questionnaire questionnaire) {
+        em.persist(questionnaire);
+        em.flush();
+    }
+
     public Questionnaire findQuestionnaireById(int questId) {
         try {
             return (Questionnaire) em.createQuery("SELECT q FROM Questionnaire q WHERE q.id = ?1").setParameter(1, questId).getSingleResult();

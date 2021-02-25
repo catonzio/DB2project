@@ -22,7 +22,7 @@ public class Questionnaire implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true/*,  cascade = { CascadeType.PERSIST, CascadeType.REMOVE }*/)
     private Product relatedProduct;
 
     @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
