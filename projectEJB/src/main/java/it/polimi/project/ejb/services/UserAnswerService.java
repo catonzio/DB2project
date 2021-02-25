@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Stateless
 public class UserAnswerService {
@@ -39,4 +40,17 @@ public class UserAnswerService {
                 .getResultList();
     }
 
+    public Boolean checkForBadWords(String answ) {
+        List<String> words = em.createNamedQuery("DirtyWord.FindAllWords", String.class).getResultList();
+        AtomicReference<Boolean> result = new AtomicReference<>(false);
+        String[] s1 = answ.split(" ");
+
+        for(String s : s1){
+            words.forEach(w -> {
+                if(s.equals(w)) result.set(true);
+                });
+        }
+
+        return result.get();
+    }
 }

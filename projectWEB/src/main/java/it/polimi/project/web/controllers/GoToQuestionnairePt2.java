@@ -4,6 +4,7 @@ import it.polimi.project.ejb.entities.*;
 import it.polimi.project.ejb.enums.QuestionType;
 import it.polimi.project.ejb.services.QuestionService;
 import it.polimi.project.ejb.services.QuestionnaireService;
+import it.polimi.project.ejb.services.UserAnswerService;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import javax.ejb.EJB;
@@ -25,6 +26,8 @@ public class GoToQuestionnairePt2 extends MyServlet {
     private QuestionnaireService questionnaireService;
     @EJB(name = "it.polimi.project.ejb.services/QuestionService")
     QuestionService questionService;*/
+    @EJB(name = "it.polimi.project.ejb.services/UserAnswerService")
+    private UserAnswerService userAnswerService;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,6 +36,7 @@ public class GoToQuestionnairePt2 extends MyServlet {
             HttpSession session = super.getSession(req, resp);
             Questionnaire questionnaire = (Questionnaire) session.getAttribute("questionnaire");
             User user = (User) session.getAttribute("user");
+            Map<String, Object> modelAttributes = new HashMap<>();
 
             UserAnswer userAnswer = new UserAnswer();
             userAnswer.setRelatedUser(user);
@@ -41,15 +45,23 @@ public class GoToQuestionnairePt2 extends MyServlet {
                                                             .filter(el -> el.getType()
                                                             .equals(QuestionType.MARKETING))
                                                             .collect(Collectors.toList());
+
+            //super.getContext(req, resp).setVariable("badwords", false);
+            session.setAttribute("badwords", false);
             for(int i=0; i<marketingQuestions.size(); i++) {
                 String answ = req.getParameter("answer"+(i+1));
+
+                Boolean result = userAnswerService.checkForBadWords(answ);
+                if(result)
+                    session.setAttribute("badwords", true);
+
                 userAnswer.addAnswer(marketingQuestions.get(i), answ);
+
             }
 
             Map<String, Object> sessionAttributes = new HashMap<>();
             sessionAttributes.put("userAnswer", userAnswer);
 
-            Map<String, Object> modelAttributes = new HashMap<>();
 
             List<String> fixedQuests = questionnaire.getQuestions().stream()
                     .filter(question -> question.getType().equals(QuestionType.FIXED))

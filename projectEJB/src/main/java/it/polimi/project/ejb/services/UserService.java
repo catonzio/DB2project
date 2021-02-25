@@ -68,4 +68,10 @@ public class UserService {
                 .getResultList();
         return users;
     }
+
+    public void blockUser(User user) {
+        user.setIs_blocked(true);
+        em.merge(user);
+        em.flush();
+    }
 }
