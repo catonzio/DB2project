@@ -19,6 +19,8 @@ public class UserAnswer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    private int pointsEarned;
+
     @ElementCollection
     private Map<Question, String> answers;
 

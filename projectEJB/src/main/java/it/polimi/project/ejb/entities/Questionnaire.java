@@ -29,6 +29,7 @@ public class Questionnaire implements Serializable {
     private List<Question> questions;
 
     @OneToMany(mappedBy = "relatedQuestionnaire")
+    @OrderBy("pointsEarned DESC")
     private List<UserAnswer> answers;
 
     private int numMarketingQuestions;
