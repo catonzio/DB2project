@@ -5,6 +5,7 @@ import it.polimi.project.ejb.entities.Question;
 import it.polimi.project.ejb.entities.Questionnaire;
 import it.polimi.project.ejb.enums.QuestionType;
 import it.polimi.project.ejb.services.ProductService;
+import it.polimi.project.ejb.services.QuestionnaireService;
 
 import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +25,8 @@ public class GoToQuestionnairePt1 extends MyServlet {
 
     @EJB(name = "it.polimi.project.ejb.services/ProductService")
     ProductService productService;
+    @EJB(name = "it.polimi.project.ejb.services/QuestionnaireService")
+    private QuestionnaireService questionnaireService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -35,6 +38,7 @@ public class GoToQuestionnairePt1 extends MyServlet {
             if(productOfDay != null) {
                 questionnaire = productOfDay.getQuestionnaire();
                 if(questionnaire != null) {
+                    //questionnaireService.persistQuestionnaire(questionnaire);
                     String path = "/WEB-INF/QuestionnairePt1.html";
 
                     Map<String, Object> sessionAttributes = new HashMap<>();

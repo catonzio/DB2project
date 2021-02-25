@@ -27,7 +27,7 @@ public class Questionnaire implements Serializable {
     @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
     private List<Question> questions;
 
-    @OneToMany(mappedBy = "relatedQuestionnaire")
+    @OneToMany(mappedBy = "relatedQuestionnaire", cascade = {CascadeType.REFRESH})
     @OrderBy("pointsEarned DESC")
     private List<UserAnswer> answers;
 

@@ -5,6 +5,7 @@ import it.polimi.project.ejb.entities.Question;
 import it.polimi.project.ejb.entities.Questionnaire;
 import it.polimi.project.ejb.entities.UserAnswer;
 import it.polimi.project.ejb.enums.QuestionType;
+import it.polimi.project.ejb.services.QuestionnaireService;
 import it.polimi.project.ejb.services.UserAnswerService;
 
 import javax.ejb.EJB;
@@ -20,6 +21,10 @@ import java.util.Map;
 
 @WebServlet("/Leaderboard")
 public class ViewLeaderboard extends MyServlet {
+    @EJB(name = "it.polimi.project.ejb.services/UserAnswerService")
+    private UserAnswerService userAnswerService;
+    @EJB(name = "it.polimi.project.ejb.services/QuestionnaireService")
+    private QuestionnaireService questionnaireService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -32,7 +37,19 @@ public class ViewLeaderboard extends MyServlet {
                 questionnaire = productOfDay.getQuestionnaire();
                 if (questionnaire != null) {
                     String path = "/WEB-INF/Leaderboard.html";
-                    List<UserAnswer> userAnswers= questionnaire.getAnswers();
+
+
+                   /* try{
+                        questionnaireService.refreshQuestionnaire(questionnaire);
+                    }catch (Exception e){
+                        questionnaireService.mergeQuestionnaire(questionnaire);
+                        questionnaireService.refreshQuestionnaire(questionnaire);
+                    }
+                    */
+                    List<UserAnswer> userAnswers = questionnaire.getAnswers();
+                    //List<UserAnswer> userAnswers= userAnswerService.findUserAnswersByQuestionnaire(questionnaire);
+                            //questionnaire.getAnswers();
+
 
                     Map<String, Object> modelAttributes = new HashMap<>();
                     modelAttributes.put("userAnswers", userAnswers);

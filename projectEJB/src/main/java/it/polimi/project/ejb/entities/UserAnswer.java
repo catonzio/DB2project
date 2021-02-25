@@ -13,6 +13,7 @@ import java.util.Map;
 @Entity
 @Getter
 @Setter
+@NamedQuery(name="UserAnswer.findByQuestionnaire", query = "SELECT a FROM UserAnswer a WHERE a.relatedQuestionnaire = ?1")
 public class UserAnswer {
 
     @Id
