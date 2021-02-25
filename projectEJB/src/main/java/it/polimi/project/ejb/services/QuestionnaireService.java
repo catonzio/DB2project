@@ -46,6 +46,8 @@ public class QuestionnaireService {
 
     public void mergeQuestionnaire(Questionnaire questionnaire) {
         em.merge(questionnaire);
+    }
+
     public List<Questionnaire> findAllQuestionnaires() {
         try {
             return em.createNamedQuery("Questionnaire.findAllQuestionnaires", Questionnaire.class).getResultList();
@@ -53,5 +55,10 @@ public class QuestionnaireService {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    public void persistQuestionnaire(Questionnaire questionnaire) {
+        em.persist(questionnaire);
+        em.flush();
     }
 }

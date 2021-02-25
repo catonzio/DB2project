@@ -38,18 +38,9 @@ public class ViewLeaderboard extends MyServlet {
                 if (questionnaire != null) {
                     String path = "/WEB-INF/Leaderboard.html";
 
-
-                   /* try{
-                        questionnaireService.refreshQuestionnaire(questionnaire);
-                    }catch (Exception e){
-                        questionnaireService.mergeQuestionnaire(questionnaire);
-                        questionnaireService.refreshQuestionnaire(questionnaire);
-                    }
-                    */
+                    questionnaireService.persistQuestionnaire(questionnaire);
                     List<UserAnswer> userAnswers = questionnaire.getAnswers();
-                    //List<UserAnswer> userAnswers= userAnswerService.findUserAnswersByQuestionnaire(questionnaire);
-                            //questionnaire.getAnswers();
-
+                    // List<UserAnswer> userAnswers= userAnswerService.findUserAnswersByQuestionnaire(questionnaire);
 
                     Map<String, Object> modelAttributes = new HashMap<>();
                     modelAttributes.put("userAnswers", userAnswers);

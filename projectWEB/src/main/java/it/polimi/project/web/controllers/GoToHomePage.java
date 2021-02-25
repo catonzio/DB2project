@@ -5,7 +5,7 @@ import it.polimi.project.ejb.entities.Product;
 import it.polimi.project.ejb.entities.Questionnaire;
 import it.polimi.project.ejb.entities.Review;
 import it.polimi.project.ejb.services.ProductService;
-import org.jboss.weld.context.http.Http;
+//import org.jboss.weld.context.http.Http;
 
 import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;

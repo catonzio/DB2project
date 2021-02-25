@@ -24,7 +24,7 @@ public class User implements Serializable {
     @Column(unique = true)
     private String email;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true, cascade = {CascadeType.REMOVE})
     private List<UserAnswer> answers;
 
     private String password;
@@ -35,7 +35,7 @@ public class User implements Serializable {
     private LocalDateTime last_login;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = { CascadeType.REMOVE,
-            CascadeType.REFRESH })
+            CascadeType.REFRESH }, orphanRemoval = true)
     private List<Review> reviews;
 
     public User() {
