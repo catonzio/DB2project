@@ -22,7 +22,7 @@ public class Questionnaire implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true/*,  cascade = { CascadeType.PERSIST, CascadeType.REMOVE }*/)
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(unique = true)
     private Product relatedProduct;
 
@@ -33,14 +33,14 @@ public class Questionnaire implements Serializable {
     @OrderBy("pointsEarned DESC")
     private List<UserAnswer> answers;
 
-    private int numMarketingQuestions;
-    private int numFixedQuestions;
+//    private int numMarketingQuestions;
+//   private int numFixedQuestions;
 
     public Questionnaire() {
         this.questions = new ArrayList<>();
         this.answers = new ArrayList<>();
-        numMarketingQuestions = 0;
-        numFixedQuestions = 0;
+        //     numMarketingQuestions = 0;
+     //   numFixedQuestions = 0;
         this.createFixedQuestions();
     }
 
@@ -67,7 +67,7 @@ public class Questionnaire implements Serializable {
             if(el.getType().equals(QuestionType.FIXED)) {
                 el.setQuestionnaire(this);
                 this.questions.add(el);
-                this.numFixedQuestions++;
+               // this.numFixedQuestions++;
             }
         });
     }
@@ -76,7 +76,7 @@ public class Questionnaire implements Serializable {
         if(q.getType().equals(QuestionType.MARKETING)) {
             this.questions.add(q);
             q.setQuestionnaire(this);
-            this.numMarketingQuestions++;
+            //this.numMarketingQuestions++;
         }
     }
 

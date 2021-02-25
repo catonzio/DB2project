@@ -25,16 +25,15 @@ public class Product implements Serializable {
     @Lob
     private byte[] photoimage;
 
-    //@Temporal(TemporalType.DATE)
     @Column(unique = true)
     private LocalDate productOfTheDay;
 
-    @OneToOne(mappedBy = "relatedProduct",fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
+    @OneToOne(mappedBy = "relatedProduct",fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(unique = true)
     private Questionnaire questionnaire;
 
     @OneToMany(mappedBy = "product", cascade = { CascadeType.REMOVE,
-            CascadeType.REFRESH }, fetch = FetchType.LAZY, orphanRemoval = true)
+            CascadeType.REFRESH }, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Review> reviews;
 
     public Product() {

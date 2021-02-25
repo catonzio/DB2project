@@ -25,37 +25,6 @@ public class ViewLeaderboard extends MyServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(super.checkUserInSession(req, resp)) {
-            Product product = (Product) super.getSession(req, resp).getAttribute("productOfDay");
-            if(product != null) {
-                Questionnaire questionnaire = product.getQuestionnaire();
-                if(questionnaire != null) {
-                    /*List<UserAnswer> answers = q.getAnswers();
-                    Set<User> usersSet = new HashSet<>();
-                    answers.forEach(el -> {
-                        usersSet.add(el.getRelatedUser());
-                    });
-                    List<User> users = usersSet.stream().sorted(Comparator.comparingInt(User::getPoints)).collect(Collectors.toList());
-
-                    Map<String, Object> modelAttributes = new HashMap<>();
-                    modelAttributes.put("users", users);
-
-                    //questionnaireService.persistQuestionnaire(questionnaire);
-                    List<UserAnswer> userAnswers = questionnaire.getAnswers();
-                    // List<UserAnswer> userAnswers= userAnswerService.findUserAnswersByQuestionnaire(questionnaire);
-
-                    Map<String, Object> modelAttributes = new HashMap<>();
-                    modelAttributes.put("userAnswers", userAnswers);
-
-                    super.redirect(req, resp, "/WEB-INF/Leaderboard.html", modelAttributes, null);
-                }
-            }
-            //super.redirect(req, resp, "/WEB-INF/Home.html", null, null);
-        }
-    }
-    */
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (super.checkUserInSession(req, resp)) {
 
             Product productOfDay = (Product) super.getSession(req, resp).getAttribute("productOfDay");
@@ -82,6 +51,6 @@ public class ViewLeaderboard extends MyServlet {
                 }
             }
         }
-    }*/
+    }
 }
 
