@@ -38,7 +38,7 @@ public class ViewLeaderboard extends MyServlet {
                     List<User> users = usersSet.stream().sorted(Comparator.comparingInt(User::getPoints)).collect(Collectors.toList());
 
                     Map<String, Object> modelAttributes = new HashMap<>();
-                    modelAttributes.put("users", users);*/
+                    modelAttributes.put("users", users);
 
                     //questionnaireService.persistQuestionnaire(questionnaire);
                     List<UserAnswer> userAnswers = questionnaire.getAnswers();
@@ -53,8 +53,8 @@ public class ViewLeaderboard extends MyServlet {
             //super.redirect(req, resp, "/WEB-INF/Home.html", null, null);
         }
     }
-
-   /* @Override
+    */
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (super.checkUserInSession(req, resp)) {
 

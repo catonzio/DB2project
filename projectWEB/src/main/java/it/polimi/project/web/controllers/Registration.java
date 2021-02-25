@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +68,7 @@ public class Registration extends MyServlet {
         user.setPassword(pwd);
         user.setName(name);
         user.setSurname(surname);
+        user.setLast_login(LocalDateTime.now());
 
         boolean result = usrService.saveUser(user);
 
