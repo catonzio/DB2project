@@ -49,7 +49,6 @@ public class UserService {
             return uList.get(0);
         }
         throw new NonUniqueResultException("More than one user registered with same credentials");
-
     }
 
     public void updateProfile(User u) throws UpdateProfileException {
