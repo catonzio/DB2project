@@ -32,7 +32,6 @@ public class User implements Serializable {
     private String name;
     private String surname;
     private Boolean is_blocked;
-    private int points;
     private LocalDateTime last_login;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.REMOVE,
