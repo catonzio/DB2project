@@ -52,9 +52,16 @@ public class MyServlet extends HttpServlet {
     }
 
     public boolean checkUserInSession(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String loginpath = getServletContext().getContextPath() + "/index.html";
         HttpSession session = getSession(req, resp);
         if (session == null || session.isNew() || session.getAttribute("user") == null) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkAdminInSession(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = getSession(req, resp);
+        if (session == null || session.isNew() || session.getAttribute("admin") == null) {
             return false;
         }
         return true;

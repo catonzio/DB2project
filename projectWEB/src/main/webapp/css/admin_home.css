@@ -88,38 +88,6 @@ body {
     border: none !important;
 }
 
-#upload_product {
-    display: block;
-}
-
-#upload_product-btn {
-    opacity: 1.0;
-}
-
-#products_list {
-    display: none;
-}
-
-#products_list-btn {
-    opacity: 0.5;
-}
-
-#questions_list {
-    display: none;
-}
-
-#questions_list-btn {
-    opacity: 0.5;
-}
-
-#users_list {
-    display: none;
-}
-
-#users_list-btn {
-    opacity: 0.5;
-}
-
 .logout {
     background-color: rgba(179, 107, 0, 0.3) !important;
     border: none !important;

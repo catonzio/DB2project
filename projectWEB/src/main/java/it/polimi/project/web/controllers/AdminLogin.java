@@ -72,7 +72,7 @@ public class AdminLogin extends MyServlet {
             path = "/WEB-INF/AdminLogin.html";
         } else {
             sessionAttributes.put("admin", admin);
-            modelAttributes.put("admin", admin);
+            //modelAttributes.put("admin", admin);
             path = "/WEB-INF/AdminHome.html";
         }
         super.redirect(request, response, path, modelAttributes, sessionAttributes);

@@ -2,6 +2,7 @@ package it.polimi.project.web.controllers;
 
 import it.polimi.project.ejb.entities.*;
 import it.polimi.project.ejb.enums.QuestionType;
+import it.polimi.project.ejb.services.QuestionService;
 import it.polimi.project.ejb.services.QuestionnaireService;
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -20,10 +21,10 @@ import java.util.stream.Collectors;
 @WebServlet("/QuestionnairePt2")
 public class GoToQuestionnairePt2 extends MyServlet {
 
-    @EJB(name = "it.polimi.project.ejb.services/QuestionnaireService")
+    /*@EJB(name = "it.polimi.project.ejb.services/QuestionnaireService")
     private QuestionnaireService questionnaireService;
     @EJB(name = "it.polimi.project.ejb.services/QuestionService")
-    QuestionService questionService;
+    QuestionService questionService;*/
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,14 +34,16 @@ public class GoToQuestionnairePt2 extends MyServlet {
             Questionnaire questionnaire = (Questionnaire) session.getAttribute("questionnaire");
             User user = (User) session.getAttribute("user");
 
-            int numQuests = questionnaire.getQuestions().size();
             UserAnswer userAnswer = new UserAnswer();
             userAnswer.setRelatedUser(user);
             userAnswer.setRelatedQuestionnaire(questionnaire);
-
-            for(int i=0; i<numQuests; i++) {
+            List<Question> marketingQuestions = questionnaire.getQuestions().stream()
+                                                            .filter(el -> el.getType()
+                                                            .equals(QuestionType.MARKETING))
+                                                            .collect(Collectors.toList());
+            for(int i=0; i<marketingQuestions.size(); i++) {
                 String answ = req.getParameter("answer"+(i+1));
-                userAnswer.addAnswer(questionnaire.getQuestions().get(i), answ);
+                userAnswer.addAnswer(marketingQuestions.get(i), answ);
             }
 
             Map<String, Object> sessionAttributes = new HashMap<>();
@@ -58,57 +61,4 @@ public class GoToQuestionnairePt2 extends MyServlet {
             super.redirect(req, resp, "/WEB-INF/QuestionnairePt2.html", modelAttributes, sessionAttributes);
         }
     }
-
-    /*@Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // If the user is not logged in (not present in session) redirect to the login
-        String loginpath = getServletContext().getContextPath() + "/index.html";
-        HttpSession session = super.getSession(request, response);
-        if (session.isNew() || session.getAttribute("user") == null) {
-            response.sendRedirect(loginpath);
-            return;
-        }
-
-
-        //Product productOfDay = (Product) super.getContext(request, response).getVariable("productOfDay");
-        //Questionnaire questionnaire = (Questionnaire) super.getContext(request, response).getVariable("questionnaire");
-        List<Question> marketingQuestions = (List<Question>) super.getContext(request, response).getVariable("marketingQuestions");
-        List<Question> fixedQuestions = (List<Question>) super.getContext(request, response).getVariable("fixedQuestions");
-
-
-
-        String path = "/WEB-INF/QuestionnairePt2.html";
-        Map<String, Object> modelAttributes = new HashMap<>();
-        modelAttributes.put("fixedQuestions", fixedQuestions);
-        modelAttributes.put("marketingQuestions", marketingQuestions);
-
-        super.redirect(request, response, path, modelAttributes, null);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-
-        Questionnaire questionnaire;
-        questionnaire = (Questionnaire) super.getContext(request, response).getVariable("questionnaire");
-
-        List<Question> fqsts = questionnaire.getFixedQuestions();
-        fqsts.forEach(question -> {
-            String answer = StringEscapeUtils.escapeJava(request.getParameter("question.id"));
-            //question.setAnswer(answer);
-        });
-
-       // boolean result = questionnaireService.saveQuestionnaire(questionnaire);
-        boolean result = true;
-        String path = "/WEB-INF/AdminHome.html";
-        Map<String, Object> modelAttributes = new HashMap<>();
-        if (!result) {
-            modelAttributes.put("errorMsg", "Incorrect inputs");
-            path = "/WEB-INF/QuestionnairePt2.html";
-        } else {
-            modelAttributes.put("productOfDay", super.getContext(request,response).getVariable("productOfDay"));
-            path = "/WEB-INF/Home.html";
-        }
-        super.redirect(request, response, path, modelAttributes, null);
-    }*/
-
 }

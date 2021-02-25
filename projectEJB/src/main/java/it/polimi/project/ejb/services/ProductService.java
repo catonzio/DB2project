@@ -64,4 +64,17 @@ public class ProductService {
         }
         return products;
     }
+
+    public Product findProductForDate(LocalDate date) {
+        Product product = null;
+        try {
+            product = (Product) em.createQuery("SELECT p FROM Product p WHERE p.productOfTheDay = ?1")
+                    .setParameter(1, date)
+                    .getSingleResult();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            product = null;
+        }
+        return product;
+    }
 }
