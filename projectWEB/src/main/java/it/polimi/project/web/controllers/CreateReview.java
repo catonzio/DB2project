@@ -86,6 +86,7 @@ public class CreateReview extends MyServlet {
             Review newReview = new Review(LocalDate.now(), description, user, prd);
             prd.addReview(newReview);
             user.addReview(newReview);
+
             //Product prd = productService.getProductOfDay();
             try {
                 reviewService.saveReview(newReview);
@@ -93,12 +94,15 @@ public class CreateReview extends MyServlet {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create review");
                 return;
             }
-            //Product prd2 = productService.getProductOfDay();
-            Map<String, Object> sessionAttributes = new HashMap<>();
-            sessionAttributes.put("productOfDay", prd);
-            String path = "/WEB-INF/Home.html";
 
-            super.redirect(req, resp, path, null, sessionAttributes);
+            if(productService.refreshProduct(prd)) {
+                //Product prd2 = productService.getProductOfDay();
+                Map<String, Object> sessionAttributes = new HashMap<>();
+                sessionAttributes.put("productOfDay", prd);
+                String path = "/WEB-INF/Home.html";
+
+                super.redirect(req, resp, path, null, sessionAttributes);
+            }
         }
     }
 }

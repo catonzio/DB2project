@@ -26,7 +26,11 @@
 				<img class="product-img" th:src="@{'data:image/png;base64,' + ${session.productOfDay.getBase64Img()}}" width="full" height="300">
 				<h1 th:text="${'Product of the day: ' + session.productOfDay.name}"></h1>
 				<div class="form-group">
-					<form action="QuestionnairePt2" method="POST">
+					<div th:if="${errorMsg}">
+						<h3 th:text="${errorMsg}"></h3>
+						<a class="btn btn-primary" href="QuestionnaireCompleted">See your answers</a>
+					</div>
+					<form action="QuestionnairePt2" method="POST" th:unless="${errorMsg}">
 						<ol>
 							<li th:each="q, indx : ${marketingQuestions}">
 								<div class="row">

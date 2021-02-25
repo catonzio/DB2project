@@ -29,6 +29,17 @@ public class ProductService {
         }
     }
 
+    public boolean refreshProduct(Product p) {
+        try {
+            em.merge(p);
+            em.flush();
+            return true;
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
     public void updateProductOfTheDay(long id) throws UpdateProfileException {
         try {
             LocalDate today = LocalDate.now();
@@ -48,6 +59,7 @@ public class ProductService {
         try {
             product = em.createQuery("SELECT p FROM Product p WHERE p.productOfTheDay = ?1", Product.class)
                     .setParameter(1, today)
+                    .setHint("javax.persistence.cache.storeMode", "REFRESH")
                     .getSingleResult();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -58,7 +70,7 @@ public class ProductService {
     public List<Product> findAllProducts() {
         List<Product> products = new ArrayList<>();
         try {
-            products = em.createQuery("SELECT p FROM Product p", Product.class).getResultList();
+            products = em.createQuery("SELECT p FROM Product p", Product.class).setHint("javax.persistence.cache.storeMode", "REFRESH").getResultList();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -70,6 +82,7 @@ public class ProductService {
         try {
             product = (Product) em.createQuery("SELECT p FROM Product p WHERE p.productOfTheDay = ?1")
                     .setParameter(1, date)
+                    .setHint("javax.persistence.cache.storeMode", "REFRESH")
                     .getSingleResult();
         }catch (Exception ex) {
             ex.printStackTrace();
@@ -80,7 +93,7 @@ public class ProductService {
 
     public Product findProductById(int id) {
         try {
-            return (Product) em.createQuery("SELECT p FROM Product p WHERE p.id = ?1").setParameter(1, id).getSingleResult();
+            return (Product) em.createQuery("SELECT p FROM Product p WHERE p.id = ?1").setParameter(1, id).setHint("javax.persistence.cache.storeMode", "REFRESH").getSingleResult();
         }catch (Exception ex) {
             ex.printStackTrace();
             return null;

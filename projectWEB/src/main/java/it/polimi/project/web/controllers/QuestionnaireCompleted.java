@@ -2,6 +2,7 @@ package it.polimi.project.web.controllers;
 
 import it.polimi.project.ejb.entities.Question;
 import it.polimi.project.ejb.entities.Questionnaire;
+import it.polimi.project.ejb.entities.User;
 import it.polimi.project.ejb.entities.UserAnswer;
 import it.polimi.project.ejb.enums.QuestionType;
 import it.polimi.project.ejb.services.UserAnswerService;
@@ -25,32 +26,48 @@ public class QuestionnaireCompleted extends MyServlet {
     private UserAnswerService userAnswerService;
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if(super.checkUserInSession(req, resp)) {
+            HttpSession session = super.getSession(req, resp);
+            User user = (User) session.getAttribute("user");
+            Questionnaire questionnaire = (Questionnaire) session.getAttribute("questionnaire");
+
+            if(user != null && questionnaire != null) {
+                UserAnswer userAnswer = user.getAnswerByQuestionnaire(questionnaire);
+                session.setAttribute("userAnswer", userAnswer);
+                super.redirect(req, resp, "/WEB-INF/QuestionnaireCompleted.html", null, null);
+            }
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(super.checkUserInSession(req, resp)) {
             HttpSession session = super.getSession(req, resp);
             Questionnaire questionnaire = (Questionnaire) session.getAttribute("questionnaire");
             UserAnswer userAnswer = (UserAnswer) session.getAttribute("userAnswer");
+            if(userAnswer != null) {
+                session.removeAttribute("userAnswer");
+                List<Question> fixedQuestions = questionnaire.getQuestions().stream()
+                        .filter(el -> el.getType()
+                                .equals(QuestionType.FIXED))
+                        .collect(Collectors.toList());
+                for(int i=0; i<fixedQuestions.size(); i++) {
+                    String answ = req.getParameter("answer" + (i + 1));
+                    userAnswer.addAnswer(fixedQuestions.get(i), answ);
+                }
 
-            List<Question> fixedQuestions = questionnaire.getQuestions().stream()
-                                                        .filter(el -> el.getType()
-                                                        .equals(QuestionType.FIXED))
-                                                        .collect(Collectors.toList());
-            for(int i=0; i<fixedQuestions.size(); i++) {
-                String answ = req.getParameter("answer" + (i + 1));
-                userAnswer.addAnswer(fixedQuestions.get(i), answ);
+                String path = "/WEB-INF/QuestionnaireCompleted.html";
+                if(userAnswerService.saveSubmittedUserAnswer(userAnswer)) {
+                    Map<String, Object> sessionAttributes = new HashMap<>();
+                    sessionAttributes.put("userAnswer", userAnswer);
+                    super.redirect(req, resp, path, null, sessionAttributes);
+                } else {
+                    Map<String, Object> modelAttributes = new HashMap<>();
+                    modelAttributes.put("errorMsg", "Failed to save answers.");
+                    super.redirect(req, resp, path, modelAttributes, null);
+                }
             }
-
-            String path = "/WEB-INF/QuestionnaireCompleted.html";
-            if(userAnswerService.saveSubmittedUserAnswer(userAnswer)) {
-                Map<String, Object> sessionAttributes = new HashMap<>();
-                sessionAttributes.put("userAnswer", userAnswer);
-                super.redirect(req, resp, path, null, sessionAttributes);
-            } else {
-                Map<String, Object> modelAttributes = new HashMap<>();
-                modelAttributes.put("errorMsg", "Failed to save answers.");
-                super.redirect(req, resp, path, modelAttributes, null);
-            }
-
         }
     }
 }

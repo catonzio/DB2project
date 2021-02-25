@@ -28,15 +28,14 @@
                     <th scope="row" th:text="${ans.id}"></th>
                     <td th:text="${ans.relatedUser.username + ' ' + ans.relatedUser.surname}"></td>
                     <td th:if="${ans.status}" th:text="${ans.status}"></td>
-                    <td th:unless="${ans.status}">SUBMITTED</td>
-                    <td>
+                    <td th:if="${#strings.equals(ans.status, 'SUBMITTED')}">
                         <div class="container">
                             <div class="row" th:each="answer : ${ans.getAnswers()}">
                                 <div class="row">
-                                    <div class="col" th:if="${answer}"  th:text="'Q' + ${answer.key.description}"></div>
+                                    <div class="col" th:if="${answer}"  th:text="'Q: ' + ${answer.key.description}"></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col" th:if="${answer}"  th:text="'A' + ${answer.value}"></div>
+                                    <div class="col" th:if="${answer}"  th:text="'A: ' + ${answer.value}"></div>
                                 </div>
                             </div>
                         </div>

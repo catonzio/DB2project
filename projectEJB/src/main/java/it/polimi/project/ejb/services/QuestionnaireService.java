@@ -37,7 +37,7 @@ public class QuestionnaireService {
 
 
     public Questionnaire findQuestionnaireByProdId(Product p) {
-        return em.createNamedQuery("Questionnaire.findByProdId", Questionnaire.class).setParameter(1, p).getSingleResult();
+        return em.createNamedQuery("Questionnaire.findByProdId", Questionnaire.class).setParameter(1, p).setHint("javax.persistence.cache.storeMode", "REFRESH").getSingleResult();
     }
 
     public void refreshQuestionnaire(Questionnaire q){
@@ -50,7 +50,7 @@ public class QuestionnaireService {
 
     public List<Questionnaire> findAllQuestionnaires() {
         try {
-            return em.createNamedQuery("Questionnaire.findAllQuestionnaires", Questionnaire.class).getResultList();
+            return em.createNamedQuery("Questionnaire.findAllQuestionnaires", Questionnaire.class).setHint("javax.persistence.cache.storeMode", "REFRESH").getResultList();
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -64,7 +64,7 @@ public class QuestionnaireService {
 
     public Questionnaire findQuestionnaireById(int questId) {
         try {
-            return (Questionnaire) em.createQuery("SELECT q FROM Questionnaire q WHERE q.id = ?1").setParameter(1, questId).getSingleResult();
+            return (Questionnaire) em.createQuery("SELECT q FROM Questionnaire q WHERE q.id = ?1").setParameter(1, questId).setHint("javax.persistence.cache.storeMode", "REFRESH").getSingleResult();
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;

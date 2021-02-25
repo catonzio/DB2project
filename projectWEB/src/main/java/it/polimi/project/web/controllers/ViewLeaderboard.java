@@ -28,9 +28,9 @@ public class ViewLeaderboard extends MyServlet {
         if(super.checkUserInSession(req, resp)) {
             Product product = (Product) super.getSession(req, resp).getAttribute("productOfDay");
             if(product != null) {
-                Questionnaire q = product.getQuestionnaire();
-                if(q != null) {
-                    List<UserAnswer> answers = q.getAnswers();
+                Questionnaire questionnaire = product.getQuestionnaire();
+                if(questionnaire != null) {
+                    /*List<UserAnswer> answers = q.getAnswers();
                     Set<User> usersSet = new HashSet<>();
                     answers.forEach(el -> {
                         usersSet.add(el.getRelatedUser());
@@ -38,12 +38,19 @@ public class ViewLeaderboard extends MyServlet {
                     List<User> users = usersSet.stream().sorted(Comparator.comparingInt(User::getPoints)).collect(Collectors.toList());
 
                     Map<String, Object> modelAttributes = new HashMap<>();
-                    modelAttributes.put("users", users);
+                    modelAttributes.put("users", users);*/
+
+                    //questionnaireService.persistQuestionnaire(questionnaire);
+                    List<UserAnswer> userAnswers = questionnaire.getAnswers();
+                    // List<UserAnswer> userAnswers= userAnswerService.findUserAnswersByQuestionnaire(questionnaire);
+
+                    Map<String, Object> modelAttributes = new HashMap<>();
+                    modelAttributes.put("userAnswers", userAnswers);
 
                     super.redirect(req, resp, "/WEB-INF/Leaderboard.html", modelAttributes, null);
                 }
             }
-            super.redirect(req, resp, "/WEB-INF/Home.html", null, null);
+            //super.redirect(req, resp, "/WEB-INF/Home.html", null, null);
         }
     }
 

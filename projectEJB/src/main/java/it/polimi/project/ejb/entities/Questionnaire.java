@@ -23,12 +23,13 @@ public class Questionnaire implements Serializable {
     private int id;
 
     @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true/*,  cascade = { CascadeType.PERSIST, CascadeType.REMOVE }*/)
+    @JoinColumn(unique = true)
     private Product relatedProduct;
 
-    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
+    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
     private List<Question> questions;
 
-    @OneToMany(mappedBy = "relatedQuestionnaire", cascade = {CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "relatedQuestionnaire", cascade = {CascadeType.REFRESH})
     @OrderBy("pointsEarned DESC")
     private List<UserAnswer> answers;
 

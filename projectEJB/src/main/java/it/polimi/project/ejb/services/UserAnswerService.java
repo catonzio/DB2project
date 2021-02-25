@@ -17,7 +17,7 @@ public class UserAnswerService {
     private EntityManager em;
 
     public boolean saveSubmittedUserAnswer(UserAnswer userAnswer) {
-        userAnswer.setStatus(AnswerStatus.CANCELLED);
+        userAnswer.setStatus(AnswerStatus.SUBMITTED);
         return saveUserAnswer(userAnswer);
     }
 
@@ -29,6 +29,7 @@ public class UserAnswerService {
     public Boolean saveUserAnswer(UserAnswer userAnswer) {
         try {
             em.persist(userAnswer);
+            em.flush();
             return true;
         }catch (Exception ex) {
             ex.printStackTrace();
@@ -47,7 +48,9 @@ public class UserAnswerService {
     }
 
     public List<UserAnswer> findUserAnswersByQuestionnaire(Questionnaire questionnaire) {
-        return em.createNamedQuery("UserAnswer.findByQuestionnaire", UserAnswer.class).setParameter(1, questionnaire)
+        return em.createNamedQuery("UserAnswer.findByQuestionnaire", UserAnswer.class)
+                .setParameter(1, questionnaire)
+                .setHint("javax.persistence.cache.storeMode", "REFRESH")
                 .getResultList();
     }
 

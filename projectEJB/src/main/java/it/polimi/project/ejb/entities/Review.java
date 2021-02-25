@@ -24,9 +24,10 @@ public class Review implements Serializable {
     private String description;
 
     @ManyToOne
+    @JoinColumn(unique = true)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.REFRESH })
     private Product product;
 
 

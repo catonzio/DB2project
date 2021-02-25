@@ -26,10 +26,11 @@ public class UserAnswer {
     @ElementCollection
     private Map<Question, String> answers;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     private Questionnaire relatedQuestionnaire;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(unique = true)
     private User relatedUser;
 
     @Enumerated(EnumType.STRING)
