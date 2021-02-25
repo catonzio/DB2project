@@ -37,6 +37,8 @@ public class CreateReview extends MyServlet {
     private UserAnswerService userAnswerService;
     @EJB(name = "it.polimi.project.ejb.services/UserService")
     private UserService userService;
+    @EJB(name = "it.polimi.project.ejb.services/ProductService")
+    private ProductService productService;
 
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

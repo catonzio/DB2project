@@ -20,7 +20,7 @@ public class UserAnswerService {
     public boolean saveSubmittedUserAnswer(UserAnswer userAnswer) {
         userAnswer.setStatus(AnswerStatus.SUBMITTED);
         return saveUserAnswer(userAnswer);
-    }*/
+    }
 
     public boolean saveCanceledUserAnswer(UserAnswer userAnswer) {
         userAnswer.setStatus(AnswerStatus.CANCELLED);
