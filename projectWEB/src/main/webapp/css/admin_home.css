@@ -64,13 +64,9 @@ body {
 }
 
 .login-main-text{
-    margin-top: 15%;
+    margin-top: 10%;
     padding: 60px;
     color: #fff;
-}
-
-.right {
-    margin-top: 40%;
 }
 
 .login-main-text h2{
@@ -88,9 +84,31 @@ body {
     border: none !important;
 }
 
+.right {
+    margin-top: 20%;
+}
+
 .logout {
     background-color: rgba(179, 107, 0, 0.3) !important;
     border: none !important;
     color: #fff !important;
     margin-left: 10% !important;
+}
+
+/*tr:hover {
+    background: gray;
+}*/
+
+tr.quest-tr:hover {
+    background: gray !important;
+}
+
+.btn-delete {
+    background: red !important;
+    border: none;
+}
+
+.btn-insert {
+    background: dodgerblue !important;
+    border: none;
 }

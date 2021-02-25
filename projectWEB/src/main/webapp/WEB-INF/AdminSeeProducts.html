@@ -22,28 +22,26 @@
 </div>
 
 <div class="main">
-    <div class="col-md-6 col-sm-12">
-        <div class="right products_list" th:if="${products != null}">
-            <p th:if="${#lists.isEmpty(products)}">No product available</p>
-            <table th:unless="${#lists.isEmpty(products)}" class="table table-borderless">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Product name</th>
-                    <th scope="col">Product of the day</th>
-                    <th scope="col">Image</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="product : ${products}">
-                    <th scope="row" th:text="${product.id}"></th>
-                    <td th:text="${product.name}"></td>
-                    <td th:text="${product.productOfTheDay}"></td>
-                    <td><img th:src="@{'data:image/png;base64,' + ${product.getBase64Img()}}" width="80" height="100"/> </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="right products_list" th:if="${products != null}">
+        <p th:if="${#lists.isEmpty(products)}">No product available</p>
+        <table th:unless="${#lists.isEmpty(products)}" class="table table-borderless">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product name</th>
+                <th scope="col">Product of the day</th>
+                <th scope="col">Image</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <th scope="row" th:text="${product.id}"></th>
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.productOfTheDay}"></td>
+                <td><img th:onclick="'inspect_quest('+${product.id}+');'" th:src="@{'data:image/png;base64,' + ${product.getBase64Img()}}" width="80" height="100"/> </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -59,15 +57,17 @@
         document.getElementById("questions_list-btn").style.opacity = 0.5;
     }
 
-    $('img').click(function() {
-        let url = "#";
-        let title = "questionnaire";
+    function inspect_quest(id) {
+        var getUrl = window.location;
+        var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+        let url = baseUrl+"/SeeImg?imgId="+id;
+        let title = "Image";
         let w = 1000;
         let h = 500;
         var left = (screen.width/2)-(w/2);
         var top = (screen.height/2)-(h/2);
         return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
-    });
+    }
 
 </script>
 </html>

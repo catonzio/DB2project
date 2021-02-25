@@ -15,11 +15,11 @@
 <div class="sidenav">
 	<div>
 		<a href="Logout" class="btn logout">Logout</a>
-		<a href="Home" class="btn logout">Home</a>
 	</div>
 	<div class="login-main-text">
 		<h2 th:text="${'Welcome back, ' + session.user.name + ' ' + session.user.surname}"><br>home page</h2>
 		<p>This is the product of the day. Answer the questionnaire and gain points.</p>
+		<a href="Home" class="btn logout">Home</a>
 	</div>
 </div>
 <div class="main">
@@ -28,6 +28,7 @@
 		<h1 th:text="${'Product of the day: ' + session.productOfDay.name}"></h1>
 		<div class="form-group">
 				<ol>
+					<!--
 					<li th:each="a : ${userAnswers}">
 						<div class="row">
 								<div class="col">
@@ -36,6 +37,15 @@
 								<div class="col">
 									<p class="question" th:text="${a.pointsEarned}"></p>
 								</div>
+						</div>
+					</li>
+					-->
+					<li th:each="u : ${users}">
+						<div class="container">
+							<div class="row">
+								<div class="col"><p class="question" th:text="${u.username}"></p></div>
+								<div class="col"><p class="question" th:text="${u.points}" ></p></div>
+							</div>
 						</div>
 					</li>
 				</ol>

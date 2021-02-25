@@ -9,8 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @WebServlet("/AdminSeeQuestionnaires")
 public class AdminSeeQuestionnaires extends MyServlet {
@@ -22,7 +21,11 @@ public class AdminSeeQuestionnaires extends MyServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(super.checkAdminInSession(req, resp)) {
             Map<String, Object> modAttr = new HashMap<>();
-            modAttr.put("questionnaires", questionnaireService.findAllQuestionnaires());
+
+            List<Questionnaire> questionnaireList = questionnaireService.findAllQuestionnaires();
+            questionnaireList.sort(Comparator.comparing(o -> o.getRelatedProduct().getProductOfTheDay()));
+
+            modAttr.put("questionnaires", questionnaireList);
             super.redirect(req, resp, "/WEB-INF/AdminSeeQuestionnaires.html", modAttr, null);
         } else {
             resp.sendRedirect("/db2-project/index.html");

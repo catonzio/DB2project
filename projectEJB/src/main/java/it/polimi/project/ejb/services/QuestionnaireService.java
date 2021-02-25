@@ -61,4 +61,13 @@ public class QuestionnaireService {
         em.persist(questionnaire);
         em.flush();
     }
+
+    public Questionnaire findQuestionnaireById(int questId) {
+        try {
+            return (Questionnaire) em.createQuery("SELECT q FROM Questionnaire q WHERE q.id = ?1").setParameter(1, questId).getSingleResult();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 }

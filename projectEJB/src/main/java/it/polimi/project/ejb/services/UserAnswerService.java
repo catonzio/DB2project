@@ -1,7 +1,9 @@
 package it.polimi.project.ejb.services;
 
 import it.polimi.project.ejb.entities.Questionnaire;
+import it.polimi.project.ejb.entities.User;
 import it.polimi.project.ejb.entities.UserAnswer;
+import it.polimi.project.ejb.enums.AnswerStatus;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -15,7 +17,17 @@ public class UserAnswerService {
     @PersistenceContext(name = "DB2Project")
     private EntityManager em;
 
-    public boolean saveUserAnswer(UserAnswer userAnswer) {
+    public boolean saveSubmittedUserAnswer(UserAnswer userAnswer) {
+        userAnswer.setStatus(AnswerStatus.CANCELLED);
+        return saveUserAnswer(userAnswer);
+    }
+
+    public boolean saveCanceledUserAnswer(UserAnswer userAnswer) {
+        userAnswer.setStatus(AnswerStatus.CANCELLED);
+        return saveUserAnswer(userAnswer);
+    }
+
+    public Boolean saveUserAnswer(UserAnswer userAnswer) {
         try {
             em.persist(userAnswer);
             return true;
