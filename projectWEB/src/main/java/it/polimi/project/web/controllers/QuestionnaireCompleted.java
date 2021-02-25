@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @WebServlet("/QuestionnaireCompleted")
 public class QuestionnaireCompleted extends MyServlet {
@@ -30,16 +31,17 @@ public class QuestionnaireCompleted extends MyServlet {
             Questionnaire questionnaire = (Questionnaire) session.getAttribute("questionnaire");
             UserAnswer userAnswer = (UserAnswer) session.getAttribute("userAnswer");
 
-            List<Question> fixedQuestions = questionnaire.getQuestions();
+            List<Question> fixedQuestions = questionnaire.getQuestions().stream()
+                                                        .filter(el -> el.getType()
+                                                        .equals(QuestionType.FIXED))
+                                                        .collect(Collectors.toList());
             for(int i=0; i<fixedQuestions.size(); i++) {
-                if(fixedQuestions.get(i).getType().equals(QuestionType.FIXED)) {
-                    String answ = req.getParameter("answer" + (i + 1));
-                    userAnswer.addAnswer(fixedQuestions.get(i), answ);
-                }
+                String answ = req.getParameter("answer" + (i + 1));
+                userAnswer.addAnswer(fixedQuestions.get(i), answ);
             }
 
             String path = "/WEB-INF/QuestionnaireCompleted.html";
-            if(userAnswerService.saveUserAnswer(userAnswer)) {
+            if(userAnswerService.saveSubmittedUserAnswer(userAnswer)) {
                 Map<String, Object> sessionAttributes = new HashMap<>();
                 sessionAttributes.put("userAnswer", userAnswer);
                 super.redirect(req, resp, path, null, sessionAttributes);

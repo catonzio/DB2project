@@ -1,5 +1,6 @@
 package it.polimi.project.ejb.entities;
 
+import it.polimi.project.ejb.enums.AnswerStatus;
 import it.polimi.project.ejb.enums.QuestionType;
 import lombok.Data;
 import lombok.Getter;
@@ -30,6 +31,9 @@ public class UserAnswer {
 
     @ManyToOne
     private User relatedUser;
+
+    @Enumerated(EnumType.STRING)
+    private AnswerStatus status;
 
     public UserAnswer() {
         this.answers = new HashMap<>();

@@ -77,4 +77,13 @@ public class ProductService {
         }
         return product;
     }
+
+    public Product findProductById(int id) {
+        try {
+            return (Product) em.createQuery("SELECT p FROM Product p WHERE p.id = ?1").setParameter(1, id).getSingleResult();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 }

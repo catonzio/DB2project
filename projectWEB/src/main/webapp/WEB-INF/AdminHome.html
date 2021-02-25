@@ -22,10 +22,10 @@
     </div>
 
     <div class="main">
-        <div class="col-md-6 col-sm-12">
+        <div class="col-md-10 col-sm-12">
             <div class="right upload-product_form" id="product_upload">
                 <form action="InsertProduct" method="post" enctype="multipart/form-data">
-                    <input type="text" id="questions_counter" name="questions_counter" value="1" style="display: none">1</input>
+                    <input type="text" id="questions_counter" name="questions_counter" value="1" style="display: none"></input>
                     <div class="form-group">
                         <label>Product name</label>
                         <input type="text" class="form-control" placeholder="Product name" name="name">
@@ -44,10 +44,10 @@
                                 <label>Create a questionnaire for the product</label>
                             </div>
                             <div class="col-2">
-                                <button type="button" class="btn btn-primary" title="Add question" onclick="add_question_()" name="add_question" id="add_question">+</button>
+                                <button type="button" class="btn btn-insert" title="Add question" onclick="add_question_()" name="add_question" id="add_question">Add</button>
                             </div>
                             <div class="col-1">
-                                <button type="button" class="btn btn-primary" title="Delete all questions" onclick="delete_all_questions()" name="add_question" id="add_question">D</button>
+                                <button type="button" class="btn btn-delete" title="Delete all questions" onclick="delete_all_questions()" name="add_question" id="delete_all_questions">DeleteAll</button>
                             </div>
                         </div>
                         <div id="table-questionnaire">
@@ -133,10 +133,10 @@
 
             let new_btn = document.createElement("button");
             new_btn.id = "button"+lastQuestion;
-            new_btn.classList.add("btn-primary");
+            new_btn.classList.add("btn-delete");
             new_btn.classList.add("btn");
             new_btn.name = "button"+lastQuestion;
-            new_btn.value = "-";
+            new_btn.text = "-";
             new_btn.type = "button";
             new_btn.title = "Delete question #"+lastQuestion;
             new_btn.onclick = function() {delete_question(new_row);};

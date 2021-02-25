@@ -46,9 +46,20 @@ public class QuestionnaireService {
 
     public void mergeQuestionnaire(Questionnaire questionnaire) {
         em.merge(questionnaire);
+    }
+
     public List<Questionnaire> findAllQuestionnaires() {
         try {
             return em.createNamedQuery("Questionnaire.findAllQuestionnaires", Questionnaire.class).getResultList();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public Questionnaire findQuestionnaireById(int questId) {
+        try {
+            return (Questionnaire) em.createQuery("SELECT q FROM Questionnaire q WHERE q.id = ?1").setParameter(1, questId).getSingleResult();
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
