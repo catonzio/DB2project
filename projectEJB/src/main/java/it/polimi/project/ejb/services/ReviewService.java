@@ -20,6 +20,7 @@ public class ReviewService {
     public void saveReview(Review review) {
         if(review != null) {
             em.persist(review);
+            em.flush();
         }
     }
 

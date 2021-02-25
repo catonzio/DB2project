@@ -40,12 +40,10 @@ public class QuestionnaireService {
         return em.createNamedQuery("Questionnaire.findByProdId", Questionnaire.class).setParameter(1, p).getSingleResult();
     }
 
-    public void refreshQuestionnaire(Questionnaire q){
-        em.refresh(q);
-    }
 
     public void mergeQuestionnaire(Questionnaire questionnaire) {
         em.merge(questionnaire);
+        em.flush();
     }
 
     public List<Questionnaire> findAllQuestionnaires() {

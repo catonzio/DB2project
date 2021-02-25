@@ -80,7 +80,8 @@ public class QuestionnaireCompleted extends MyServlet {
             }
 
             String path = "/WEB-INF/QuestionnaireCompleted.html";
-            if(userAnswerService.saveSubmittedUserAnswer(userAnswer)) {
+            if(userAnswerService.saveUserAnswer(userAnswer)) {
+                userAnswerService.mergeAnswer(userAnswer);
                 Map<String, Object> sessionAttributes = new HashMap<>();
                 sessionAttributes.put("userAnswer", userAnswer);
                 super.redirect(req, resp, path, null, sessionAttributes);

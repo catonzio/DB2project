@@ -17,10 +17,10 @@ public class UserAnswerService {
     @PersistenceContext(name = "DB2Project")
     private EntityManager em;
 
-    public boolean saveSubmittedUserAnswer(UserAnswer userAnswer) {
+    /*public boolean saveSubmittedUserAnswer(UserAnswer userAnswer) {
         userAnswer.setStatus(AnswerStatus.CANCELLED);
         return saveUserAnswer(userAnswer);
-    }
+    }*/
 
     public boolean saveCanceledUserAnswer(UserAnswer userAnswer) {
         userAnswer.setStatus(AnswerStatus.CANCELLED);
@@ -64,5 +64,10 @@ public class UserAnswerService {
         }
 
         return result.get();
+    }
+
+    public void mergeAnswer(UserAnswer userAnswer) {
+        em.merge(userAnswer);
+        em.flush();
     }
 }
