@@ -5,6 +5,7 @@ import it.polimi.project.ejb.entities.Product;
 import it.polimi.project.ejb.entities.Questionnaire;
 import it.polimi.project.ejb.entities.Review;
 import it.polimi.project.ejb.services.ProductService;
+import org.jboss.weld.context.http.Http;
 
 import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +27,9 @@ public class GoToHomePage extends MyServlet {
 			throws IOException {
 		// If the user is not logged in (not present in session) redirect to the login
 		if(super.checkUserInSession(req, resp)) {
+			HttpSession session = super.getSession(req, resp);
+			if(session.getAttribute("userAnswer") != null)
+				session.removeAttribute("userAnswer");
 			super.redirect(req, resp, "/WEB-INF/Home.html", null, null);
 		} else {
 			resp.sendRedirect("/db2-project/index.html");

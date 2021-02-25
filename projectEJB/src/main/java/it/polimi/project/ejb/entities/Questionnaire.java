@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NamedQuery(name="Questionnaire.findByProdId", query = "SELECT q FROM Questionnaire q WHERE q.relatedProduct = ?1 ")
+@NamedQuery(name="Questionnaire.findAllQuestionnaires", query = "SELECT q FROM Questionnaire q")
 public class Questionnaire implements Serializable {
     private static final long serialVersionUID = 1L;
 

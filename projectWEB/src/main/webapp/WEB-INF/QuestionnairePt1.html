@@ -31,14 +31,14 @@
 							<li th:each="q, indx : ${marketingQuestions}">
 								<div class="row">
 									<div class="col-12">
-										<p class="question" th:text="${q}"></p>
+										<p class="question" th:text="${q.description}"></p>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-12">
 										<!--<textarea class="answer" rows="1" required th:if="${session.userAnswer != null}" th:value="${session.userAnswer.answers.get(indx)}"></textarea>-->
-										<textarea class="answer" rows="1" required th:if="${session.userAnswer == null}"></textarea>
-										<textarea class="answer" rows="1" required th:unless="${session.userAnswer == null}" th:value="${session.user.surname}"></textarea>
+										<textarea class="answer" rows="1" required th:if="${session.userAnswer}" th:text="${session.userAnswer.answers.get(q)}"></textarea>
+										<textarea class="answer" rows="1" required th:unless="${session.userAnswer}"></textarea>
 									</div>
 								</div>
 							</li>

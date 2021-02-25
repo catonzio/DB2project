@@ -38,6 +38,10 @@ public class InsertProduct extends MyServlet {
         Part filePart = req.getPart("image");
         String fileName = getFileName(filePart);
         InputStream fileContent = null;
+        LocalDate date = LocalDate.parse(req.getParameter("date"));
+
+        if(isPresentDate(date))
+            redirect(req, resp, "Already exists a product for this day.");
 
         if(fileName == null || (!fileName.endsWith(".jpg") && !fileName.endsWith(".png")))
             redirect(req, resp, "Image format not correct.");
@@ -47,7 +51,13 @@ public class InsertProduct extends MyServlet {
             byte[] bytes = IOUtils.toByteArray(fileContent);
 
             Questionnaire q = extractQuestionnaire(req);
-            Product p = extractProduct(req);
+
+            String name = req.getParameter("name");
+
+            Product p = new Product();
+            p.setName(name);
+            p.setProductOfTheDay(date);
+
             p.setPhotoimage(bytes);
 
             //questionnaireService.saveQuestionnaire(q, p);
@@ -69,6 +79,11 @@ public class InsertProduct extends MyServlet {
                 fileContent.close();
             }
         }
+    }
+
+    private boolean isPresentDate(LocalDate date) {
+        Product product = productService.findProductForDate(date);
+        return product != null;
     }
 
     private Questionnaire extractQuestionnaire(HttpServletRequest req) throws Exception {
@@ -95,16 +110,6 @@ public class InsertProduct extends MyServlet {
             ex.printStackTrace();
         }
         return q;
-    }
-
-    private Product extractProduct(HttpServletRequest req) {
-        String name = req.getParameter("name");
-        LocalDate date = LocalDate.parse(req.getParameter("date"));
-
-        Product p = new Product();
-        p.setName(name);
-        p.setProductOfTheDay(date);
-        return p;
     }
 
     private void redirect(HttpServletRequest req, HttpServletResponse resp, String message) {

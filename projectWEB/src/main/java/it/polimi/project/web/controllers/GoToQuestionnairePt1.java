@@ -46,12 +46,13 @@ public class GoToQuestionnairePt1 extends MyServlet {
 
                     sessionAttributes.put("questionnaire", questionnaire);
 
-                    List<String> markQuests = questionnaire.getQuestions().stream()
+                    List<Question> markQuests = questionnaire.getQuestions().stream()
                             .filter(question -> question.getType().equals(QuestionType.MARKETING))
-                            .map(Question::getDescription)
                             .collect(Collectors.toList());
 
                     modelAttributes.put("marketingQuestions", markQuests);
+
+
                     super.redirect(req, resp, path, modelAttributes, sessionAttributes);
                 } else {
                     super.redirect(req, resp, "/WEB-INF/Home.html", null, null);

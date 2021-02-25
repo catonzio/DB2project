@@ -12,14 +12,12 @@
     <div class="sidenav">
         <a href="Logout" class="btn logout">Logout</a>
         <div class="login-main-text">
-            <h2 th:text="${'Welcome back, ' + admin.username}"><br>home page</h2>
+            <h2 th:text="${'Welcome back, ' + session.admin.username}"><br>home page</h2>
             <p>This is your home page. From here you can insert and inspect products and questionnaires.</p>
-            <button class="btn btn-primary" onclick="upload_product()" id="product_upload-btn">Upload product</button><br>
-            <form method="get" action="GetAllProducts">
-                <button class="btn btn-primary" onclick="show_all_products()" id="products_list-btn">Show all products</button><br>
-            </form>
-            <button class="btn btn-primary" onclick="show_all_questionnaires()" id="questions_list-btn">Show all questionnaires</button><br>
-            <button class="btn btn-primary" onclick="show_all_users()" id="users_list-btn">Show all users</button><br>
+            <a href="#" class="btn btn-primary" id="product_upload-btn">Upload product</a><br>
+            <a href="AdminSeeProducts" class="btn btn-primary" id="products_list-btn">Show all products</a><br>
+            <a href="AdminSeeQuestionnaires" class="btn btn-primary" id="questions_list-btn">Show all questionnaires</a><br>
+            <a href="AdminSeeUsers" class="btn btn-primary" id="users_list-btn">Show all users</a><br>
         </div>
     </div>
 
@@ -64,36 +62,6 @@
                     <input type="submit" class="btn btn-primary">
                 </form>
             </div>
-
-            <div class="right products_list" id="products_list" th:if="${products != null}">
-                <p th:if="${#lists.isEmpty(products)}">No product available</p>
-                <table th:unless="${#lists.isEmpty(products)}" class="table table-borderless">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Product name</th>
-                        <th scope="col">Product of the day</th>
-                        <th scope="col">Image</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="product : ${products}">
-                        <th scope="row" th:text="${product.id}"></th>
-                        <td th:text="${product.name}"></td>
-                        <td th:text="${product.productOfTheDay}"></td>
-                        <td><img th:src="@{'data:image/png;base64,' + ${product.getBase64Img()}}" width="80" height="100"> </img> </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="right questions_list" id="questions_list">
-                <h1>Questionnaires list</h1>
-            </div>
-
-            <div class="right users_list" id="users_list">
-                <h1>Users list</h1>
-            </div>
         </div>
     </div>
 
@@ -102,6 +70,13 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     <script type="text/javascript">
+        window.onload = function() {
+            document.getElementById("product_upload-btn").style.opacity = 1;
+            document.getElementById("users_list-btn").style.opacity = 0.5;
+            document.getElementById("products_list-btn").style.opacity = 0.5;
+            document.getElementById("questions_list-btn").style.opacity = 0.5;
+        }
+
         function delete_all_questions() {
             let div_quest = document.getElementById("table-questionnaire");
             let rows = div_quest.getElementsByClassName("row");
@@ -174,111 +149,6 @@
         function delete_question(row) {
             row.remove();
             refresh_questions();
-        }
-
-        function show_all_products() {
-            $('#products_list-btn').animate({
-                opacity: 1.0,
-            }, 300);
-            $('#products_list').css({
-                display: "block"
-            });
-            $('#product_upload').css({
-                display: "none"
-            });
-            $('#questions_list').css({
-                display: "none"
-            });
-            $('#users_list').css({
-                display: "none"
-            });
-            $('#product_upload-btn').animate({
-                opacity: 0.5
-            }, 300);
-            $('#questions_list-btn').animate({
-                opacity: 0.5
-            }, 300);
-            $('#users_list-btn').animate({
-                opacity: 0.5
-            }, 300);
-        }
-        function show_all_questionnaires() {
-            $('#questions_list-btn').animate({
-                opacity: 1.0,
-            }, 300);
-            $('#questions_list').css({
-                display: "block"
-            });
-            $('#product_upload').css({
-                display: "none"
-            });
-            $('#products_list').css({
-                display: "none"
-            });
-            $('#users_list').css({
-                display: "none"
-            });
-            $('#product_upload-btn').animate({
-                opacity: 0.5
-            }, 300);
-            $('#products_list-btn').animate({
-                opacity: 0.5
-            }, 300);
-            $('#users_list-btn').animate({
-                opacity: 0.5
-            }, 300);
-        }
-        function show_all_users() {
-            $('#users_list-btn').animate({
-                opacity: 1.0,
-            }, 300);
-            $('#users_list').css({
-                display: "block"
-            });
-            $('#product_upload').css({
-                display: "none"
-            });
-            $('#products_list').css({
-                display: "none"
-            });
-            $('#questions_list').css({
-                display: "none"
-            });
-            $('#product_upload-btn').animate({
-                opacity: 0.5
-            }, 300);
-            $('#products_list-btn').animate({
-                opacity: 0.5
-            }, 300);
-            $('#questions_list-btn').animate({
-                opacity: 0.5
-            }, 300);
-        }
-        function upload_product() {
-            $('#product_upload-btn').animate({
-                opacity: 1.0,
-            }, 300);
-            $('#product_upload').css({
-                display: "block"
-            });
-            $('#questions_list').css({
-                display: "none"
-            });
-            $('#products_list').css({
-                display: "none"
-            });
-            $('#users_list').css({
-                display: "none"
-            });
-            $('#questions_list-btn-btn').animate({
-                opacity: 0.5
-            }, 300);
-            $('#products_list-btn').animate({
-                opacity: 0.5
-            }, 300);
-            $('#users_list-btn').animate({
-                opacity: 0.5
-            }, 300);
         }
     </script>
 </html>

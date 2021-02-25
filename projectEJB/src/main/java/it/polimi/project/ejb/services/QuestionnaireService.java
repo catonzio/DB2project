@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.List;
 
 @Stateless
 public class QuestionnaireService {
@@ -45,5 +46,12 @@ public class QuestionnaireService {
 
     public void mergeQuestionnaire(Questionnaire questionnaire) {
         em.merge(questionnaire);
+    public List<Questionnaire> findAllQuestionnaires() {
+        try {
+            return em.createNamedQuery("Questionnaire.findAllQuestionnaires", Questionnaire.class).getResultList();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 }
