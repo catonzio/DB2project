@@ -20,7 +20,7 @@ BEGIN
 		SET POINTSEARNED = POINTSEARNED + 1
 		WHERE ID = new.UserAnswer_ID;
 	END IF;
-END#
+END
 
 
 

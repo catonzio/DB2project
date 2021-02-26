@@ -37,4 +37,18 @@ public class ReviewService {
         em.persist(product);
     }
 
+    public Review findReviewByAuthor(User user) {
+        try {
+            if(user != null) {
+                return (Review) em.createQuery("SELECT r FROM Review r WHERE r.user.id = ?1")
+                        .setParameter(1, user.getId())
+                        .setHint("javax.persistence.cache.storeMode", "REFRESH")
+                        .getSingleResult();
+            } else
+                return null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 }

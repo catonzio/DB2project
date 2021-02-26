@@ -54,7 +54,6 @@ public class CheckLogin extends MyServlet {
 			return;
 		}
 
-
 		// If the user exists, add info to the session and go to home page, otherwise
 		// show login page with error message
 
@@ -66,9 +65,13 @@ public class CheckLogin extends MyServlet {
 			modelAttributes.put("errorMsg", "Incorrect username or password");
 			path = "/index.html";
 		} else {
-			sessionAttributes.put("user", user);
-			sessionAttributes.put("productOfDay", productService.getProductOfDay());
-			path = "/WEB-INF/Home.html";
+			if(!user.getIs_blocked()) {
+				sessionAttributes.put("user", user);
+				sessionAttributes.put("productOfDay", productService.getProductOfDay());
+				path = "/WEB-INF/Home.html";
+			} else {
+				path = "/Blocked.html";
+			}
 		}
 		super.redirect(request, response, path, modelAttributes, sessionAttributes);
 	}

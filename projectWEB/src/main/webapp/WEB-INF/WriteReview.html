@@ -21,6 +21,7 @@
 				<p>This is the product of the day. Answer the questionnaire and gain points.</p>
 				<a href="Home" class="btn btn-side" id="new-review-btn">Home page</a><br>
 				<a href="QuestionnairePt1" class="btn btn-side" id="questionnaire-btn">Answer questionnaire</a><br>
+				<a href="Leaderboard" class="btn btn-side" id="leaderboard-btn">Go to leaderboard page</a><br>
 			</div>
 		</div>
 		<div class="main">
@@ -29,7 +30,11 @@
 					<img class="product-img" th:src="@{'data:image/png;base64,' + ${session.productOfDay.getBase64Img()}}" width="full" height="300">
 					<div class="questionnaire-form">
 						<h1 th:text="${'Product of the day: ' + session.productOfDay.name}"></h1><br>
-						<form id="q1" action="NewReview" method="POST" class="form-group row">
+						<div th:if="${review}">
+							<h3 th:text="${errorMsg}"></h3>
+							<p th:text="${review.description}"></p>
+						</div>
+						<form id="q1" action="NewReview" method="POST" class="form-group row" th:unless="${review}">
 							<div class="container">
 								<div class="row">
 									<div class="col-sm-10">

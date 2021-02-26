@@ -21,6 +21,7 @@
         <p>This is the product of the day. Answer the questionnaire and gain points.</p>
         <a href="Home" class="btn btn-side" id="new-review-btn">Home page</a><br>
         <a href="NewReview" class="btn btn-side" id="questionnaire-btn">Write review</a><br>
+        <a href="Leaderboard" class="btn btn-side" id="leaderboard-btn">Go to leaderboard page</a><br>
     </div>
 </div>
 <div class="main">
@@ -41,6 +42,9 @@
                         <div class="col">
                             <h5>Question type</h5>
                         </div>
+                        <div class="col">
+                            <h5>Earned points</h5>
+                        </div>
                     </div>
                     <div class="row" th:each="usrans : ${session.userAnswer.answers}">
                         <div class="col">
@@ -49,8 +53,8 @@
                         <div class="col">
                             <p th:text="${usrans.value}"></p>
                         </div>
-                        <div class="col">
-                            <p th:text="${usrans.key.type}"></p>
+                        <div class="col" th:if="${usrans == session.userAnswer.answers.get(0)}">
+                            <p th:text="${session.userAnswer.getPointsEarned()}"></p>
                         </div>
                     </div>
                 </div>

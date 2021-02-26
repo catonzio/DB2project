@@ -29,7 +29,7 @@ public class CancelAnswer extends MyServlet {
                 Questionnaire questionnaire = (Questionnaire) session.getAttribute("questionnaire");
                 userAnswer.setRelatedQuestionnaire(questionnaire);
                 session.removeAttribute("userAnswer");
-                userAnswer.getAnswers().forEach((k, v) -> v = null);
+                userAnswer.setAnswers(null);
 
                 if(userAnswerService.saveCanceledUserAnswer(userAnswer))
                     super.redirect(req, resp, "/WEB-INF/Home.html", null, null);

@@ -43,20 +43,15 @@ public class CreateReview extends MyServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        // If the user is not logged in (not present in session) redirect to the login
-        /*String loginpath = getServletContext().getContextPath() + "/index.html";
-        HttpSession session = super.getSession(req, resp);
-        if (session.isNew() || session.getAttribute("user") == null) {
-            resp.sendRedirect(loginpath);
-            return;
-        }*/
-
-        //Product productOfDay = productService.getProductOfDay();
-        //Map<String, Object> modelAttributes = new HashMap<>();
-        //modelAttributes.put("productOfDay", productOfDay);
         if (super.checkUserInSession(req, resp)) {
             String path = "/WEB-INF/WriteReview.html";
-            super.redirect(req, resp, path, null, null);
+            Review review = reviewService.findReviewByAuthor((User) super.getSession(req, resp).getAttribute("user"));
+            Map<String, Object> modAttr = new HashMap<>();
+            if(review!=null) {
+                modAttr.put("review", review);
+                modAttr.put("errorMsg", "You have already written a review!");
+            }
+            super.redirect(req, resp, path, modAttr, null);
         } else {
             resp.sendRedirect("/db2-project/index.html");
         }

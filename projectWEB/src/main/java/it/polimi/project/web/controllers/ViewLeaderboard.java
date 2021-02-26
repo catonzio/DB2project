@@ -36,13 +36,13 @@ public class ViewLeaderboard extends MyServlet {
                     String path = "/WEB-INF/Leaderboard.html";
 
                     questionnaireService.mergeQuestionnaire(questionnaire);
-                    List<UserAnswer> userAnswers = questionnaire.getAnswers();
+                    List<UserAnswer> userAnswers = userAnswerService.findUserAnswersByQuestionnaire(questionnaire);
                     userAnswers.forEach( a -> {
                         userAnswerService.mergeAnswer(a);
                     });
-                    //userAnswerService.mergeAnswers(userAnswers);
-                    // List<UserAnswer> userAnswers= userAnswerService.findUserAnswersByQuestionnaire(questionnaire);
 
+                    userAnswers.sort(Comparator.comparingInt(UserAnswer::getPointsEarned));
+                    Collections.reverse(userAnswers);
                     Map<String, Object> modelAttributes = new HashMap<>();
                     modelAttributes.put("userAnswers", userAnswers);
 
